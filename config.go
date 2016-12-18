@@ -22,6 +22,7 @@ type Configuration struct {
 var Config = Configuration{}
 
 func init() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
 
 // Load config file
