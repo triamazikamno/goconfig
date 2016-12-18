@@ -2,62 +2,73 @@ package goconfig
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 )
 
-const configPath = "./"
-const configFile = "./config.json"
+const (
+	defaultPath       = "./"
+	defaultConfigFile = "config.json"
+)
 
-// Configuration struct for main sistem
+// Configuration struct
 type Configuration struct {
 	Name  string
 	Value interface{}
 }
 
-// Config instantiate the system settings, all settings should be read in system load.
+// Config instantiate the system settings.
 var Config = Configuration{}
 
-func loadConfig() {
-	file, err := os.Open("config.json")
+func init() {
+}
+
+// Load config file
+func Load() (err error) {
+	configFile := defaultPath + defaultConfigFile
+	file, err := os.Open(configFile)
 	if err != nil {
-		log.Fatal("loadConfig open config.json:", err)
+		log.Println("loadConfig open config.json:", err)
+		return
 	}
 	defer file.Close()
 
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&Config)
 	if err != nil {
-		log.Fatal("loadConfig Decode:", err)
+		log.Println("loadConfig Decode:", err)
+		return
 	}
+	return
 }
 
-func saveConfig() {
-	fmt.Println("init")
-	_, err := os.Stat(configPath)
+// Save config file
+func (c *Configuration) Save() (err error) {
+	_, err = os.Stat(defaultPath)
 
 	if os.IsNotExist(err) {
-		os.Mkdir(configPath, 0700)
+		os.Mkdir(defaultPath, 0700)
 	}
+
+	configFile := defaultPath + defaultConfigFile
 
 	_, err = os.Stat(configFile)
-
-	m := Configuration{
-		Name:  "Local Name",
-		Value: 8080}
-
-	fmt.Println(m)
-
-	b, err := json.MarshalIndent(m, "", "\t")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
-	err = ioutil.WriteFile(configFile, b, 0644)
+	b, err := json.MarshalIndent(c, "", "\t")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
+	err = ioutil.WriteFile(defaultConfigFile, b, 0644)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
 }
