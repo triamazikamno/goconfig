@@ -1,1 +1,1 @@
-package goconfig
+package goConfig

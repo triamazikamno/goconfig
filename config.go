@@ -1,4 +1,4 @@
-package goconfig
+package goConfig
 
 import (
 	"encoding/json"
@@ -26,11 +26,11 @@ func init() {
 }
 
 // Load config file
-func Load() (err error) {
+func (c *Configuration) Load() (err error) {
 	configFile := defaultPath + defaultConfigFile
 	file, err := os.Open(configFile)
 	if err != nil {
-		log.Println("loadConfig open config.json:", err)
+		log.Println("Load open config.json:", err)
 		return
 	}
 	defer file.Close()
@@ -38,7 +38,7 @@ func Load() (err error) {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&Config)
 	if err != nil {
-		log.Println("loadConfig Decode:", err)
+		log.Println("Load Decode:", err)
 		return
 	}
 	return
