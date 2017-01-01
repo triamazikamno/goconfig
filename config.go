@@ -85,7 +85,9 @@ func Getenv(env string) (r string) {
 func parseTags(s interface{}) {
 
 	st := reflect.TypeOf(s)
-	field := st.Field(0)
-	fmt.Println(field.Tag.Get("config"), field.Tag.Get("species"))
+	for i := 0; i < st.NumField(); i++ {
+		field := st.Field(i)
+		fmt.Println(field.Tag.Get("config"))
+	}
 
 }
