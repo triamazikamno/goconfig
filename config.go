@@ -95,7 +95,8 @@ func parseTags(s interface{}) (err error) {
 
 	ref := st.Elem()
 	if ref.Kind() != reflect.Struct {
-		return errors.New("Not a struct")
+		err = errors.New("Not a struct")
+		return
 	}
 
 	for i := 0; i < ref.NumField(); i++ {
