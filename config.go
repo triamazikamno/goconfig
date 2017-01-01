@@ -122,6 +122,12 @@ func parseTags(s interface{}) (err error) {
 
 		}
 
+		// change value POC
+		if field.Type.Kind() == reflect.String {
+			value := vt.Elem().Field(i)
+			value.SetString("TEST")
+		}
+
 		fmt.Println("name:", field.Name,
 			"| cfg:", field.Tag.Get("config"),
 			"| cfgDefault:", field.Tag.Get("cfgDefault"),

@@ -1,6 +1,9 @@
 package goConfig
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 type testSub struct {
 	S1 int        `config:"field S1" cfgDefault:"1"`
@@ -25,6 +28,8 @@ func TestParseTags(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	fmt.Printf("%#v\n", s)
 
 	s1 := "test"
 	err = parseTags(s1)
