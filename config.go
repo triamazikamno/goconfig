@@ -2,9 +2,11 @@ package goConfig
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
 )
 
 const (
@@ -72,4 +74,18 @@ func (c *Configuration) Save() (err error) {
 		return
 	}
 	return
+}
+
+// Getenv get enviroment variable
+func Getenv(env string) (r string) {
+	r = os.Getenv(env)
+	return
+}
+
+func parseTags(s interface{}) {
+
+	st := reflect.TypeOf(s)
+	field := st.Field(0)
+	fmt.Println(field.Tag.Get("config"), field.Tag.Get("species"))
+
 }
