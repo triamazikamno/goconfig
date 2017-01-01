@@ -87,6 +87,7 @@ func Getenv(env string) (r string) {
 func parseTags(s interface{}) (err error) {
 
 	st := reflect.TypeOf(s)
+	vt := reflect.ValueOf(s)
 
 	if st.Kind() != reflect.Ptr {
 		err = errors.New("Not a pointer")
@@ -101,7 +102,23 @@ func parseTags(s interface{}) (err error) {
 
 	for i := 0; i < ref.NumField(); i++ {
 		field := ref.Field(i)
-		fmt.Println(field.Tag.Get("config"))
+
+		kindStr := ""
+		if field.Type.Kind() == reflect.Struct {
+			kindStr = "Struct"
+
+			value := vt.Elem().Field(i)
+			for i2 := 0; i2 < value.NumField(); i2++ {
+				println(value.Field(i2).Kind().String())
+				fmt.Printf("%#v\n", value.Field(i2).Interface())
+			}
+
+		}
+
+		fmt.Println(field.Name,
+			field.Tag.Get("config"),
+			field.Type, kindStr)
+
 	}
 	return
 }
