@@ -8,6 +8,9 @@ type testAux struct {
 }
 
 func TestParseTags(t *testing.T) {
-	aux := testAux{a: 1}
-	parseTags(aux)
+	s := &testAux{a: 1}
+	err := parseTags(s)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
