@@ -13,4 +13,16 @@ func TestParseTags(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	s1 := "test"
+	err = parseTags(s1)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
+
+	err = parseTags(&s1)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
+
 }
