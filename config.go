@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"reflect"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -82,12 +84,23 @@ func Getenv(env string) (r string) {
 	return
 }
 
-func parseTags(s interface{}) {
+func parseTags(s interface{}) (err error) {
 
 	st := reflect.TypeOf(s)
-	for i := 0; i < st.NumField(); i++ {
-		field := st.Field(i)
-		fmt.Println(field.Tag.Get("config"))
+
+	if st.Kind() != reflect.Ptr {
+		err = errors.New("Not a pointer")
+		return
 	}
 
+	ref := st.Elem()
+	if ref.Kind() != reflect.Struct {
+		return errors.New("Not a struct")
+	}
+
+	for i := 0; i < ref.NumField(); i++ {
+		field := ref.Field(i)
+		fmt.Println(field.Tag.Get("config"))
+	}
+	return
 }
