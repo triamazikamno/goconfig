@@ -108,9 +108,16 @@ func parseTags(s interface{}) (err error) {
 			kindStr = "Struct"
 
 			value := vt.Elem().Field(i)
-			for i2 := 0; i2 < value.NumField(); i2++ {
-				println(value.Field(i2).Kind().String())
-				fmt.Printf("%#v\n", value.Field(i2).Interface())
+			/*
+				for i2 := 0; i2 < value.NumField(); i2++ {
+					fmt.Printf("%v %#v\n",
+						value.Field(i2).Kind().String(),
+						value.Field(i2).Interface())
+				}
+			*/
+			err = parseTags(value.Addr().Interface())
+			if err != nil {
+				return
 			}
 
 		}
