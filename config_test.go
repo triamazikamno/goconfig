@@ -3,13 +3,13 @@ package goConfig
 import "testing"
 
 type testSub struct {
-	S1 int        `config:"field S1"`
+	S1 int        `config:"field S1" cfgDefault:"1"`
 	S2 int        `config:"field S2"`
 	S3 string     `config:"field S3"`
 	S4 testSubSub `config:"Sub Sub"`
 }
 type testSubSub struct {
-	SS1 int    `config:"field SS1"`
+	SS1 int    `config:"field SS1" cfgDefault:"2"`
 	SS2 int    `config:"field SS2"`
 	SS3 string `config:"field SS3"`
 }

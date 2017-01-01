@@ -122,9 +122,10 @@ func parseTags(s interface{}) (err error) {
 
 		}
 
-		fmt.Println(field.Name,
-			field.Tag.Get("config"),
-			field.Type, kindStr)
+		fmt.Println("name:", field.Name,
+			"| cfg:", field.Tag.Get("config"),
+			"| cfgDefault:", field.Tag.Get("cfgDefault"),
+			"| type:", field.Type, kindStr)
 
 	}
 	return
