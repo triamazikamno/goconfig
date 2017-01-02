@@ -16,21 +16,12 @@ const (
 	defaultConfigFile = "config.json"
 )
 
-// Configuration struct
-type Configuration struct {
-	Name  string
-	Value interface{}
-}
-
-// Config instantiate the system settings.
-var Config = Configuration{}
-
 func init() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
 
 // Load config file
-func (c *Configuration) Load() (err error) {
+func Load(config interface{}) (err error) {
 	configFile := defaultPath + defaultConfigFile
 	file, err := os.Open(configFile)
 	if err != nil {
@@ -40,7 +31,7 @@ func (c *Configuration) Load() (err error) {
 	defer file.Close()
 
 	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&Config)
+	err = decoder.Decode(&config)
 	if err != nil {
 		log.Println("Load Decode:", err)
 		return
@@ -49,7 +40,7 @@ func (c *Configuration) Load() (err error) {
 }
 
 // Save config file
-func (c *Configuration) Save() (err error) {
+func Save(config interface{}) (err error) {
 	_, err = os.Stat(defaultPath)
 
 	if os.IsNotExist(err) {
@@ -64,7 +55,7 @@ func (c *Configuration) Save() (err error) {
 		return
 	}
 
-	b, err := json.MarshalIndent(c, "", "\t")
+	b, err := json.MarshalIndent(config, "", "\t")
 	if err != nil {
 		log.Println(err)
 		return
