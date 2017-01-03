@@ -86,13 +86,10 @@ func parseTags(s interface{}) (err error) {
 	for i := 0; i < refField.NumField(); i++ {
 		field := refField.Field(i)
 		value := refValue.Field(i)
+		kind := field.Type.Kind()
 
-		kindStr := ""
-
-		switch field.Type.Kind() {
+		switch kind {
 		case reflect.Struct:
-			kindStr = "Struct"
-
 			err = parseTags(value.Addr().Interface())
 			if err != nil {
 				return
@@ -102,13 +99,13 @@ func parseTags(s interface{}) (err error) {
 		case reflect.Int:
 			value.SetInt(999)
 		default:
-			err = errors.New("Type not supported " + field.Type.Kind().String())
+			err = errors.New("Type not supported " + kind.String())
 		}
 
 		fmt.Println("name:", field.Name,
 			"| cfg:", field.Tag.Get("config"),
 			"| cfgDefault:", field.Tag.Get("cfgDefault"),
-			"| type:", field.Type, kindStr)
+			"| type:", field.Type)
 
 	}
 	return
