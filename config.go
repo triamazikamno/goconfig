@@ -83,12 +83,12 @@ func parseTags(s interface{}) (err error) {
 
 	for i := 0; i < ref.NumField(); i++ {
 		field := ref.Field(i)
+		value := vt.Elem().Field(i)
 
 		kindStr := ""
 		if field.Type.Kind() == reflect.Struct {
 			kindStr = "Struct"
 
-			value := vt.Elem().Field(i)
 			err = parseTags(value.Addr().Interface())
 			if err != nil {
 				return
@@ -98,7 +98,6 @@ func parseTags(s interface{}) (err error) {
 
 		// change value POC
 		if field.Type.Kind() == reflect.String {
-			value := vt.Elem().Field(i)
 			value.SetString("TEST")
 		}
 
