@@ -76,14 +76,14 @@ func parseTags(s interface{}) (err error) {
 		return
 	}
 
-	ref := st.Elem()
-	if ref.Kind() != reflect.Struct {
+	refField := st.Elem()
+	if refField.Kind() != reflect.Struct {
 		err = errors.New("Not a struct")
 		return
 	}
 
-	for i := 0; i < ref.NumField(); i++ {
-		field := ref.Field(i)
+	for i := 0; i < refField.NumField(); i++ {
+		field := refField.Field(i)
 		value := vt.Elem().Field(i)
 
 		kindStr := ""
