@@ -99,6 +99,10 @@ func parseTags(s interface{}) (err error) {
 			}
 		case reflect.String:
 			value.SetString("TEST")
+		case reflect.Int:
+			value.SetInt(999)
+		default:
+			err = errors.New("Type not supported " + field.Type.Kind().String())
 		}
 
 		fmt.Println("name:", field.Name,
