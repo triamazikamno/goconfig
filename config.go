@@ -82,9 +82,10 @@ func parseTags(s interface{}) (err error) {
 		return
 	}
 
+	refValue := vt.Elem()
 	for i := 0; i < refField.NumField(); i++ {
 		field := refField.Field(i)
-		value := vt.Elem().Field(i)
+		value := refValue.Field(i)
 
 		kindStr := ""
 
