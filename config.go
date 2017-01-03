@@ -35,9 +35,10 @@ func Load(config interface{}) (err error) {
 // Save config file
 func Save(config interface{}) (err error) {
 	_, err = os.Stat(defaultPath)
-
 	if os.IsNotExist(err) {
 		os.Mkdir(defaultPath, 0700)
+	} else if err != nil {
+		return
 	}
 
 	configFile := defaultPath + defaultConfigFile
