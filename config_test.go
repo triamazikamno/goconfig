@@ -41,5 +41,31 @@ func TestParseTags(t *testing.T) {
 	if err == nil {
 		t.Fatal("Error expected")
 	}
+}
 
+/*
+{
+  "domain": "www.example.com",
+  "mongodb": {
+    "host": "localhost",
+    "port": 27017
+  }
+*/
+
+type mongoDB struct {
+	Host string
+	port int
+}
+
+type configTest struct {
+	Domain  string
+	MongoDB mongoDB
+}
+
+func TestLoad(t *testing.T) {
+	config := configTest{}
+	err := Load(config)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
