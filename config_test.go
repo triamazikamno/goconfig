@@ -64,8 +64,11 @@ type configTest struct {
 
 func TestLoad(t *testing.T) {
 	config := configTest{}
-	err := Load(config)
+	err := Load(&config)
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	fmt.Printf("\n\nTestLoad: %#v\n\n", config)
+
 }

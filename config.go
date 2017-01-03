@@ -29,6 +29,9 @@ func Load(config interface{}) (err error) {
 	if err != nil {
 		return
 	}
+
+	fmt.Printf("\n\nLoad: %#v\n\n", config)
+
 	return
 }
 
