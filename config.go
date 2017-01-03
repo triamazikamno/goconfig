@@ -36,7 +36,10 @@ func Load(config interface{}) (err error) {
 		return
 	}
 
-	fmt.Printf("\n\nLoad: %#v\n\n", config)
+	err = parseTags(config)
+	if err == nil {
+		return
+	}
 
 	return
 }
@@ -96,6 +99,10 @@ func parseTags(s interface{}) (err error) {
 		field := refField.Field(i)
 		value := refValue.Field(i)
 		kind := field.Type.Kind()
+
+		if field.PkgPath == "" {
+			continue // unexported
+		}
 
 		switch kind {
 		case reflect.Struct:
