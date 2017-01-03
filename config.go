@@ -87,18 +87,16 @@ func parseTags(s interface{}) (err error) {
 		value := vt.Elem().Field(i)
 
 		kindStr := ""
-		if field.Type.Kind() == reflect.Struct {
+
+		switch field.Type.Kind() {
+		case reflect.Struct:
 			kindStr = "Struct"
 
 			err = parseTags(value.Addr().Interface())
 			if err != nil {
 				return
 			}
-
-		}
-
-		// change value POC
-		if field.Type.Kind() == reflect.String {
+		case reflect.String:
 			value.SetString("TEST")
 		}
 
