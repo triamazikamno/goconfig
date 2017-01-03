@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"reflect"
 
@@ -16,16 +15,11 @@ const (
 	defaultConfigFile = "config.json"
 )
 
-func init() {
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-}
-
 // Load config file
 func Load(config interface{}) (err error) {
 	configFile := defaultPath + defaultConfigFile
 	file, err := os.Open(configFile)
 	if err != nil {
-		log.Println("Load open config.json:", err)
 		return
 	}
 	defer file.Close()
@@ -33,7 +27,6 @@ func Load(config interface{}) (err error) {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&config)
 	if err != nil {
-		log.Println("Load Decode:", err)
 		return
 	}
 	return
@@ -51,19 +44,16 @@ func Save(config interface{}) (err error) {
 
 	_, err = os.Stat(configFile)
 	if err != nil {
-		log.Println(err)
 		return
 	}
 
 	b, err := json.MarshalIndent(config, "", "\t")
 	if err != nil {
-		log.Println(err)
 		return
 	}
 
 	err = ioutil.WriteFile(defaultConfigFile, b, 0644)
 	if err != nil {
-		log.Println(err)
 		return
 	}
 	return
