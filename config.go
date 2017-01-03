@@ -15,6 +15,12 @@ const (
 	defaultConfigFile = "config.json"
 )
 
+// Tag set the main tag
+var Tag = "cfg"
+
+// TagDefault set tag default
+var TagDefault = "cfgDefault"
+
 // Load config file
 func Load(config interface{}) (err error) {
 	configFile := defaultPath + defaultConfigFile
@@ -106,8 +112,8 @@ func parseTags(s interface{}) (err error) {
 		}
 
 		fmt.Println("name:", field.Name,
-			"| cfg:", field.Tag.Get("config"),
-			"| cfgDefault:", field.Tag.Get("cfgDefault"),
+			"| cfg:", field.Tag.Get(Tag),
+			"| cfgDefault:", field.Tag.Get(TagDefault),
 			"| type:", field.Type)
 
 	}
