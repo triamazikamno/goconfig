@@ -54,7 +54,7 @@ func TestParseTags(t *testing.T) {
 
 type mongoDB struct {
 	Host string
-	port int
+	Port int
 }
 
 type configTest struct {
@@ -63,6 +63,7 @@ type configTest struct {
 }
 
 func TestLoad(t *testing.T) {
+	//config := configTest{Domain: "test", MongoDB: mongoDB{}}
 	config := configTest{}
 	err := Load(&config)
 	if err != nil {

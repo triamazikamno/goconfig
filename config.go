@@ -21,8 +21,8 @@ var Tag = "cfg"
 // TagDefault set tag default
 var TagDefault = "cfgDefault"
 
-// Load config file
-func Load(config interface{}) (err error) {
+// LoadJSON config file
+func LoadJSON(config interface{}) (err error) {
 	configFile := defaultPath + defaultConfigFile
 	file, err := os.Open(configFile)
 	if err != nil {
@@ -36,8 +36,19 @@ func Load(config interface{}) (err error) {
 		return
 	}
 
+	return
+}
+
+// Load config file
+func Load(config interface{}) (err error) {
+
+	err = LoadJSON(config)
+	if err != nil {
+		return
+	}
+
 	err = parseTags(config)
-	if err == nil {
+	if err != nil {
 		return
 	}
 
@@ -100,8 +111,8 @@ func parseTags(s interface{}) (err error) {
 		value := refValue.Field(i)
 		kind := field.Type.Kind()
 
-		if field.PkgPath == "" {
-			continue // unexported
+		if field.PkgPath != "" {
+			continue
 		}
 
 		switch kind {
