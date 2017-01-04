@@ -23,6 +23,9 @@ var Tag = "cfg"
 // TagDefault set tag default
 var TagDefault = "cfgDefault"
 
+// EnviromentVarSeparator separe names on enviroment variables
+var EnviromentVarSeparator = "_"
+
 // LoadJSON config file
 func LoadJSON(config interface{}) (err error) {
 	configFile := defaultPath + defaultConfigFile
@@ -128,7 +131,7 @@ func parseTags(s interface{}, superTag string) (err error) {
 		}
 
 		if superTag != "" {
-			t = superTag + "_" + t
+			t = superTag + EnviromentVarSeparator + t
 		}
 		fmt.Println("t:", t)
 
