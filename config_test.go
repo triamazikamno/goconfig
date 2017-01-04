@@ -6,20 +6,20 @@ import (
 )
 
 type testSub struct {
-	S1 int        `cfg:"field S1" cfgDefault:"1"`
-	S2 int        `cfg:"field S2"`
-	S3 string     `cfg:"field S3"`
-	S4 testSubSub `cfg:"Sub Sub"`
+	S1 int        `cfg:"S1" cfgDefault:"1"`
+	S2 int        `cfg:"S2"`
+	S3 string     `cfg:"S3"`
+	S4 testSubSub `cfg:"S4"`
 }
 type testSubSub struct {
-	SS1 int    `cfg:"field SS1" cfgDefault:"2"`
-	SS2 int    `cfg:"field SS2"`
-	SS3 string `cfg:"field SS3"`
+	SS1 int    `cfg:"SS1" cfgDefault:"2"`
+	SS2 int    `cfg:"SS2"`
+	SS3 string `cfg:"SS3"`
 }
 type testAux struct {
-	A int     `cfg:"field a"`
-	B string  `cfg:"field b"`
-	S testSub `cfg:"Sub"`
+	A int     `cfg:"A"`
+	B string  `cfg:"B"`
+	S testSub `cfg:"S"`
 }
 
 func TestParseTags(t *testing.T) {
