@@ -30,6 +30,10 @@ type Settings struct {
 
 // Setup Pointer to internal variables
 var Setup *Settings
+var parseMap map[reflect.Kind]func(
+	field *reflect.StructField,
+	value *reflect.Value,
+	tag string) (err error)
 
 func init() {
 	Setup = &Settings{
@@ -40,6 +44,14 @@ func init() {
 		TagDisabled:             "-",
 		EnvironmentVarSeparator: "_",
 	}
+
+	parseMap = make(map[reflect.Kind]func(
+		field *reflect.StructField,
+		value *reflect.Value, tag string) (err error))
+
+	parseMap[reflect.Int] = reflectInt
+	parseMap[reflect.String] = reflectString
+
 }
 
 // LoadJSON config file
@@ -130,44 +142,24 @@ func parseTags(s interface{}, superTag string) (err error) {
 			continue
 		}
 
-		t := field.Tag.Get(Setup.Tag)
-		if t == Setup.TagDisabled {
-			continue
-		}
-
+		t := updateTag(&field, superTag)
 		if t == "" {
-			t = strings.ToUpper(field.Name)
-		}
-
-		if superTag != "" {
-			t = superTag + Setup.EnvironmentVarSeparator + t
-		}
-
-		env := os.Getenv(t)
-
-		if env == "" && kind != reflect.Struct {
 			continue
 		}
 
-		switch kind {
-		case reflect.Struct:
+		if kind == reflect.Struct {
 			err = parseTags(value.Addr().Interface(), t)
 			if err != nil {
 				return
 			}
-		case reflect.String:
-			//value.SetString("TEST")
-			value.SetString(env)
-		case reflect.Int:
-			//value.SetInt(999)
-			var intEnv int64
-			intEnv, err = strconv.ParseInt(env, 10, 64)
-			if err != nil {
-				return
-			}
-			value.SetInt(intEnv)
-		default:
+			continue
+		}
+
+		if f, ok := parseMap[kind]; ok {
+			err = f(&field, &value, t)
+		} else {
 			err = errors.New("Type not supported " + kind.String())
+			return
 		}
 
 		fmt.Println("name:", field.Name,
@@ -176,5 +168,49 @@ func parseTags(s interface{}, superTag string) (err error) {
 			"| type:", field.Type)
 
 	}
+	return
+}
+
+func updateTag(field *reflect.StructField, superTag string) (ret string) {
+	ret = field.Tag.Get(Setup.Tag)
+	if ret == Setup.TagDisabled {
+		return
+	}
+
+	if ret == "" {
+		ret = strings.ToUpper(field.Name)
+	}
+
+	if superTag != "" {
+		ret = superTag + Setup.EnvironmentVarSeparator + ret
+	}
+	return
+}
+
+func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	//value.SetInt(999)
+	env := os.Getenv(tag)
+	if env == "" {
+		return
+	}
+
+	var intEnv int64
+	intEnv, err = strconv.ParseInt(env, 10, 64)
+	if err != nil {
+		return
+	}
+	value.SetInt(intEnv)
+
+	return
+}
+
+func reflectString(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	//value.SetString("TEST")
+	env := os.Getenv(tag)
+	if env == "" {
+		return
+	}
+	value.SetString(env)
+
 	return
 }
