@@ -14,8 +14,9 @@ import (
 
 const (
 	// ConfigPath sets default config path
-	ConfigPath        = "./"
-	defaultConfigFile = "config.json"
+	ConfigPath = "./"
+	// ConfigFile name of default config file
+	ConfigFile = "config.json"
 )
 
 // Tag set the main tag
@@ -29,7 +30,7 @@ var EnviromentVarSeparator = "_"
 
 // LoadJSON config file
 func LoadJSON(config interface{}) (err error) {
-	configFile := ConfigPath + defaultConfigFile
+	configFile := ConfigPath + ConfigFile
 	file, err := os.Open(configFile)
 	if err != nil {
 		return
@@ -70,7 +71,7 @@ func Save(config interface{}) (err error) {
 		return
 	}
 
-	configFile := ConfigPath + defaultConfigFile
+	configFile := ConfigPath + ConfigFile
 
 	_, err = os.Stat(configFile)
 	if err != nil {
@@ -82,7 +83,7 @@ func Save(config interface{}) (err error) {
 		return
 	}
 
-	err = ioutil.WriteFile(defaultConfigFile, b, 0644)
+	err = ioutil.WriteFile(ConfigFile, b, 0644)
 	if err != nil {
 		return
 	}
