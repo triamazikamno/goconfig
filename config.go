@@ -12,25 +12,36 @@ import (
 	"github.com/pkg/errors"
 )
 
-const (
-	// ConfigPath sets default config path
-	ConfigPath = "./"
-	// ConfigFile name of default config file
-	ConfigFile = "config.json"
-)
+// Settings default
+type Settings struct {
+	// Path sets default config path
+	Path string
+	// File name of default config file
+	File string
+	// Tag set the main tag
+	Tag string
+	// TagDefault set tag default
+	TagDefault string
+	// EnviromentVarSeparator separe names on enviroment variables
+	EnviromentVarSeparator string
+}
 
-// Tag set the main tag
-var Tag = "cfg"
+// Setup Pointer to internal variables
+var Setup *Settings
 
-// TagDefault set tag default
-var TagDefault = "cfgDefault"
-
-// EnviromentVarSeparator separe names on enviroment variables
-var EnviromentVarSeparator = "_"
+func init() {
+	Setup = &Settings{
+		Path:                   "./",
+		File:                   "config.json",
+		Tag:                    "cfg",
+		TagDefault:             "cfgDefault",
+		EnviromentVarSeparator: "_",
+	}
+}
 
 // LoadJSON config file
 func LoadJSON(config interface{}) (err error) {
-	configFile := ConfigPath + ConfigFile
+	configFile := Setup.Path + Setup.File
 	file, err := os.Open(configFile)
 	if err != nil {
 		return
@@ -64,14 +75,14 @@ func Load(config interface{}) (err error) {
 
 // Save config file
 func Save(config interface{}) (err error) {
-	_, err = os.Stat(ConfigPath)
+	_, err = os.Stat(Setup.Path)
 	if os.IsNotExist(err) {
-		os.Mkdir(ConfigPath, 0700)
+		os.Mkdir(Setup.Path, 0700)
 	} else if err != nil {
 		return
 	}
 
-	configFile := ConfigPath + ConfigFile
+	configFile := Setup.Path + Setup.File
 
 	_, err = os.Stat(configFile)
 	if err != nil {
@@ -83,7 +94,7 @@ func Save(config interface{}) (err error) {
 		return
 	}
 
-	err = ioutil.WriteFile(ConfigFile, b, 0644)
+	err = ioutil.WriteFile(configFile, b, 0644)
 	if err != nil {
 		return
 	}
@@ -123,7 +134,7 @@ func parseTags(s interface{}, superTag string) (err error) {
 		}
 
 		env := ""
-		t := field.Tag.Get(Tag)
+		t := field.Tag.Get(Setup.Tag)
 		if t == "-" {
 			continue
 		}
@@ -133,7 +144,7 @@ func parseTags(s interface{}, superTag string) (err error) {
 		}
 
 		if superTag != "" {
-			t = superTag + EnviromentVarSeparator + t
+			t = superTag + Setup.EnviromentVarSeparator + t
 		}
 		fmt.Println("t:", t)
 
@@ -165,8 +176,8 @@ func parseTags(s interface{}, superTag string) (err error) {
 		}
 
 		fmt.Println("name:", field.Name,
-			"| cfg:", field.Tag.Get(Tag),
-			"| cfgDefault:", field.Tag.Get(TagDefault),
+			"| cfg:", field.Tag.Get(Setup.Tag),
+			"| cfgDefault:", field.Tag.Get(Setup.TagDefault),
 			"| type:", field.Type)
 
 	}
