@@ -49,7 +49,7 @@ func Load(config interface{}) (err error) {
 		return
 	}
 
-	err = parseTags(config)
+	err = parseTags(config, "")
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func Getenv(env string) (r string) {
 	return
 }
 
-func parseTags(s interface{}) (err error) {
+func parseTags(s interface{}, superTag string) (err error) {
 
 	st := reflect.TypeOf(s)
 	vt := reflect.ValueOf(s)
@@ -127,6 +127,11 @@ func parseTags(s interface{}) (err error) {
 			t = strings.ToUpper(field.Name)
 		}
 
+		if superTag != "" {
+			t = superTag + "_" + t
+		}
+		fmt.Println("t:", t)
+
 		env = os.Getenv(t)
 
 		if env == "" && kind != reflect.Struct {
@@ -135,7 +140,7 @@ func parseTags(s interface{}) (err error) {
 
 		switch kind {
 		case reflect.Struct:
-			err = parseTags(value.Addr().Interface())
+			err = parseTags(value.Addr().Interface(), t)
 			if err != nil {
 				return
 			}
