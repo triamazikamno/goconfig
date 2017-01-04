@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"reflect"
+	"strconv"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -115,6 +117,22 @@ func parseTags(s interface{}) (err error) {
 			continue
 		}
 
+		env := ""
+		t := field.Tag.Get(Tag)
+		if t == "-" {
+			continue
+		}
+
+		if t == "" {
+			t = strings.ToUpper(field.Name)
+		}
+
+		env = os.Getenv(t)
+
+		if env == "" && kind != reflect.Struct {
+			continue
+		}
+
 		switch kind {
 		case reflect.Struct:
 			err = parseTags(value.Addr().Interface())
@@ -122,9 +140,16 @@ func parseTags(s interface{}) (err error) {
 				return
 			}
 		case reflect.String:
-			value.SetString("TEST")
+			//value.SetString("TEST")
+			value.SetString(env)
 		case reflect.Int:
-			value.SetInt(999)
+			//value.SetInt(999)
+			var intEnv int64
+			intEnv, err = strconv.ParseInt(env, 10, 64)
+			if err != nil {
+				return
+			}
+			value.SetInt(intEnv)
 		default:
 			err = errors.New("Type not supported " + kind.String())
 		}
