@@ -22,6 +22,8 @@ type Settings struct {
 	Tag string
 	// TagDefault set tag default
 	TagDefault string
+	// TagDisabled used to not process an input
+	TagDisabled string
 	// EnviromentVarSeparator separe names on enviroment variables
 	EnviromentVarSeparator string
 }
@@ -35,6 +37,7 @@ func init() {
 		File:                   "config.json",
 		Tag:                    "cfg",
 		TagDefault:             "cfgDefault",
+		TagDisabled:            "-",
 		EnviromentVarSeparator: "_",
 	}
 }
@@ -110,7 +113,6 @@ func Getenv(env string) (r string) {
 func parseTags(s interface{}, superTag string) (err error) {
 
 	st := reflect.TypeOf(s)
-	vt := reflect.ValueOf(s)
 
 	if st.Kind() != reflect.Ptr {
 		err = errors.New("Not a pointer")
@@ -123,7 +125,8 @@ func parseTags(s interface{}, superTag string) (err error) {
 		return
 	}
 
-	refValue := vt.Elem()
+	//vt := reflect.ValueOf(s)
+	refValue := reflect.ValueOf(s).Elem()
 	for i := 0; i < refField.NumField(); i++ {
 		field := refField.Field(i)
 		value := refValue.Field(i)
@@ -133,9 +136,8 @@ func parseTags(s interface{}, superTag string) (err error) {
 			continue
 		}
 
-		env := ""
 		t := field.Tag.Get(Setup.Tag)
-		if t == "-" {
+		if t == Setup.TagDisabled {
 			continue
 		}
 
@@ -146,9 +148,8 @@ func parseTags(s interface{}, superTag string) (err error) {
 		if superTag != "" {
 			t = superTag + Setup.EnviromentVarSeparator + t
 		}
-		fmt.Println("t:", t)
 
-		env = os.Getenv(t)
+		env := os.Getenv(t)
 
 		if env == "" && kind != reflect.Struct {
 			continue
