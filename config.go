@@ -24,8 +24,8 @@ type Settings struct {
 	TagDefault string
 	// TagDisabled used to not process an input
 	TagDisabled string
-	// EnviromentVarSeparator separe names on enviroment variables
-	EnviromentVarSeparator string
+	// EnvironmentVarSeparator separe names on environment variables
+	EnvironmentVarSeparator string
 }
 
 // Setup Pointer to internal variables
@@ -33,12 +33,12 @@ var Setup *Settings
 
 func init() {
 	Setup = &Settings{
-		Path:                   "./",
-		File:                   "config.json",
-		Tag:                    "cfg",
-		TagDefault:             "cfgDefault",
-		TagDisabled:            "-",
-		EnviromentVarSeparator: "_",
+		Path:                    "./",
+		File:                    "config.json",
+		Tag:                     "cfg",
+		TagDefault:              "cfgDefault",
+		TagDisabled:             "-",
+		EnvironmentVarSeparator: "_",
 	}
 }
 
@@ -104,12 +104,6 @@ func Save(config interface{}) (err error) {
 	return
 }
 
-// Getenv get enviroment variable
-func Getenv(env string) (r string) {
-	r = os.Getenv(env)
-	return
-}
-
 func parseTags(s interface{}, superTag string) (err error) {
 
 	st := reflect.TypeOf(s)
@@ -146,7 +140,7 @@ func parseTags(s interface{}, superTag string) (err error) {
 		}
 
 		if superTag != "" {
-			t = superTag + Setup.EnviromentVarSeparator + t
+			t = superTag + Setup.EnvironmentVarSeparator + t
 		}
 
 		env := os.Getenv(t)
