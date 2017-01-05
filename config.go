@@ -33,10 +33,13 @@ type Settings struct {
 // Setup Pointer to internal variables
 var Setup *Settings
 
-var parseMap map[reflect.Kind]func(
+// ReflectFunc type used to create funcrions to parse struct and tags
+type ReflectFunc func(
 	field *reflect.StructField,
 	value *reflect.Value,
 	tag string) (err error)
+
+var parseMap map[reflect.Kind]ReflectFunc
 
 func init() {
 	Setup = &Settings{
@@ -49,9 +52,7 @@ func init() {
 		FileRequired:            false,
 	}
 
-	parseMap = make(map[reflect.Kind]func(
-		field *reflect.StructField,
-		value *reflect.Value, tag string) (err error))
+	parseMap = make(map[reflect.Kind]ReflectFunc)
 
 	parseMap[reflect.Struct] = reflectStruct
 	parseMap[reflect.Int] = reflectInt
