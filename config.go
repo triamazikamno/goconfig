@@ -178,6 +178,7 @@ func parseTags(s interface{}, superTag string) (err error) {
 func updateTag(field *reflect.StructField, superTag string) (ret string) {
 	ret = field.Tag.Get(Setup.Tag)
 	if ret == Setup.TagDisabled {
+		ret = ""
 		return
 	}
 
