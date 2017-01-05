@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"reflect"
 	"strconv"
@@ -32,6 +33,15 @@ type Settings struct {
 
 // Setup Pointer to internal variables
 var Setup *Settings
+
+// ErrNotAPointer error when not a pointer
+var ErrNotAPointer = errors.New("Not a pointer")
+
+// ErrNotAStruct error when not a struct
+var ErrNotAStruct = errors.New("Not a struct")
+
+// ErrTypeNotSupported error when type not supported
+var ErrTypeNotSupported = errors.New("Type not supported")
 
 // ReflectFunc type used to create funcrions to parse struct and tags
 type ReflectFunc func(
@@ -130,13 +140,13 @@ func parseTags(s interface{}, superTag string) (err error) {
 	st := reflect.TypeOf(s)
 
 	if st.Kind() != reflect.Ptr {
-		err = errors.New("Not a pointer")
+		err = ErrNotAPointer
 		return
 	}
 
 	refField := st.Elem()
 	if refField.Kind() != reflect.Struct {
-		err = errors.New("Not a struct")
+		err = ErrNotAStruct
 		return
 	}
 
@@ -162,7 +172,8 @@ func parseTags(s interface{}, superTag string) (err error) {
 				return
 			}
 		} else {
-			err = errors.New("Type not supported " + kind.String())
+			log.Println("Type not supported" + kind.String())
+			err = ErrTypeNotSupported
 			return
 		}
 
