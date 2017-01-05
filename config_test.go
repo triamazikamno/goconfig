@@ -63,6 +63,8 @@ type configTest struct {
 }
 
 func TestLoad(t *testing.T) {
+
+	Setup.Path = "./examples/"
 	//config := configTest{Domain: "test", MongoDB: mongoDB{}}
 	config := configTest{}
 	err := Load(&config)
