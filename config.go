@@ -18,6 +18,8 @@ type Settings struct {
 	Path string
 	// File name of default config file
 	File string
+	// FileRequired config file required
+	FileRequired bool
 	// Tag set the main tag
 	Tag string
 	// TagDefault set tag default
@@ -30,6 +32,7 @@ type Settings struct {
 
 // Setup Pointer to internal variables
 var Setup *Settings
+
 var parseMap map[reflect.Kind]func(
 	field *reflect.StructField,
 	value *reflect.Value,
@@ -43,6 +46,7 @@ func init() {
 		TagDefault:              "cfgDefault",
 		TagDisabled:             "-",
 		EnvironmentVarSeparator: "_",
+		FileRequired:            false,
 	}
 
 	parseMap = make(map[reflect.Kind]func(
@@ -58,7 +62,10 @@ func init() {
 func LoadJSON(config interface{}) (err error) {
 	configFile := Setup.Path + Setup.File
 	file, err := os.Open(configFile)
-	if err != nil {
+	if os.IsNotExist(err) && !Setup.FileRequired {
+		err = nil
+		return
+	} else if err != nil {
 		return
 	}
 	defer file.Close()
