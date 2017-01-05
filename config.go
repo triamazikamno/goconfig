@@ -164,6 +164,9 @@ func parseTags(s interface{}, superTag string) (err error) {
 
 		if f, ok := parseMap[kind]; ok {
 			err = f(&field, &value, t)
+			if err != nil {
+				return
+			}
 		} else {
 			err = errors.New("Type not supported " + kind.String())
 			return
