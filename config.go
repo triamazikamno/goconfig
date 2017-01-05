@@ -194,19 +194,33 @@ func updateTag(field *reflect.StructField, superTag string) (ret string) {
 	return
 }
 
-func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
-	//value.SetInt(999)
-	env := os.Getenv(tag)
-	if env == "" {
+func getNewValue(field *reflect.StructField, tag string) (ret string) {
+
+	ret = os.Getenv(tag)
+	if ret != "" {
 		return
 	}
 
-	var intEnv int64
-	intEnv, err = strconv.ParseInt(env, 10, 64)
+	ret = field.Tag.Get(Setup.TagDefault)
+	if ret != "" {
+		return
+	}
+
+	return
+
+}
+
+func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	//value.SetInt(999)
+
+	newValue := getNewValue(field, tag)
+
+	var intNewValue int64
+	intNewValue, err = strconv.ParseInt(newValue, 10, 64)
 	if err != nil {
 		return
 	}
-	value.SetInt(intEnv)
+	value.SetInt(intNewValue)
 
 	return
 }
