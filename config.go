@@ -53,6 +53,7 @@ func init() {
 		field *reflect.StructField,
 		value *reflect.Value, tag string) (err error))
 
+	parseMap[reflect.Struct] = reflectStruct
 	parseMap[reflect.Int] = reflectInt
 	parseMap[reflect.String] = reflectString
 
@@ -154,14 +155,6 @@ func parseTags(s interface{}, superTag string) (err error) {
 			continue
 		}
 
-		if kind == reflect.Struct {
-			err = parseTags(value.Addr().Interface(), t)
-			if err != nil {
-				return
-			}
-			continue
-		}
-
 		if f, ok := parseMap[kind]; ok {
 			err = f(&field, &value, t)
 			if err != nil {
@@ -211,6 +204,11 @@ func getNewValue(field *reflect.StructField, tag string) (ret string) {
 
 	return
 
+}
+
+func reflectStruct(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	err = parseTags(value.Addr().Interface(), tag)
+	return
 }
 
 func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
