@@ -227,11 +227,9 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 
 func reflectString(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
 	//value.SetString("TEST")
-	env := os.Getenv(tag)
-	if env == "" {
-		return
-	}
-	value.SetString(env)
+	newValue := getNewValue(field, tag)
+
+	value.SetString(newValue)
 
 	return
 }
