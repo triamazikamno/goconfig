@@ -29,7 +29,7 @@ func TestParseTags(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("%#v\n", s)
+	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
 
 	s1 := "test"
 	err = parseTags(s1, "")
