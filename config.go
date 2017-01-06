@@ -104,6 +104,8 @@ func Load(config interface{}) (err error) {
 		return
 	}
 
+	postProc()
+
 	return
 }
 
@@ -178,11 +180,13 @@ func parseTags(s interface{}, superTag string) (err error) {
 		}
 
 		fmt.Println("name:", field.Name,
+			"| value", value,
 			"| cfg:", field.Tag.Get(Setup.Tag),
 			"| cfgDefault:", field.Tag.Get(Setup.TagDefault),
 			"| type:", field.Type)
 
 	}
+
 	return
 }
 
@@ -194,7 +198,7 @@ func updateTag(field *reflect.StructField, superTag string) (ret string) {
 	}
 
 	if ret == "" {
-		ret = strings.ToUpper(field.Name)
+		ret = field.Name
 	}
 
 	if superTag != "" {
@@ -203,20 +207,33 @@ func updateTag(field *reflect.StructField, superTag string) (ret string) {
 	return
 }
 
-func getNewValue(field *reflect.StructField, tag string) (ret string) {
+func getNewValue(field *reflect.StructField, value *reflect.Value, tag string) (ret string) {
 
-	ret = os.Getenv(tag)
+	//TODO: get value from parameter.
+
+	// get value from environment variable
+	ret = os.Getenv(strings.ToUpper(tag))
 	if ret != "" {
 		return
 	}
 
+	// get value from config file
+	switch value.Kind() {
+	case reflect.String:
+		ret = value.String()
+		return
+	case reflect.Int:
+		ret = strconv.FormatInt(value.Int(), 10)
+		return
+	}
+
+	// get value from default settings
 	ret = field.Tag.Get(Setup.TagDefault)
-	if ret != "" {
-		return
-	}
 
 	return
+}
 
+func postProc() {
 }
 
 func reflectStruct(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
@@ -227,7 +244,7 @@ func reflectStruct(field *reflect.StructField, value *reflect.Value, tag string)
 func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
 	//value.SetInt(999)
 
-	newValue := getNewValue(field, tag)
+	newValue := getNewValue(field, value, tag)
 
 	var intNewValue int64
 	intNewValue, err = strconv.ParseInt(newValue, 10, 64)
@@ -241,7 +258,8 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 
 func reflectString(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
 	//value.SetString("TEST")
-	newValue := getNewValue(field, tag)
+
+	newValue := getNewValue(field, value, tag)
 
 	value.SetString(newValue)
 
