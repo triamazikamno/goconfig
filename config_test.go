@@ -3,6 +3,8 @@ package goConfig
 import (
 	"fmt"
 	"testing"
+
+	"github.com/crgimenes/goConfig/structTag"
 )
 
 type testSub struct {
@@ -24,7 +26,7 @@ type testAux struct {
 
 func TestParseTags(t *testing.T) {
 	s := &testAux{A: 1, S: testSub{S1: 1, S2: 2, S3: "test"}}
-	err := parseTags(s, "")
+	err := structTag.Parse(s, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,12 +34,12 @@ func TestParseTags(t *testing.T) {
 	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
 
 	s1 := "test"
-	err = parseTags(s1, "")
+	err = structTag.Parse(s1, "")
 	if err == nil {
 		t.Fatal("Error expected")
 	}
 
-	err = parseTags(&s1, "")
+	err = structTag.Parse(&s1, "")
 	if err == nil {
 		t.Fatal("Error expected")
 	}
