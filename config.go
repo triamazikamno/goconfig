@@ -2,7 +2,6 @@ package goConfig
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -179,12 +178,13 @@ func parseTags(s interface{}, superTag string) (err error) {
 			return
 		}
 
-		fmt.Println("name:", field.Name,
-			"| value", value,
-			"| cfg:", field.Tag.Get(Setup.Tag),
-			"| cfgDefault:", field.Tag.Get(Setup.TagDefault),
-			"| type:", field.Type)
-
+		/*
+			fmt.Println("name:", field.Name,
+				"| value", value,
+				"| cfg:", field.Tag.Get(Setup.Tag),
+				"| cfgDefault:", field.Tag.Get(Setup.TagDefault),
+				"| type:", field.Type)
+		*/
 	}
 
 	return
