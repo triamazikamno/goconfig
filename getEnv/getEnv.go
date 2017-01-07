@@ -10,8 +10,21 @@ import (
 )
 
 func init() {
+	SetTag("env")
+	SetTagDefault("envDefault")
+
 	structTag.ParseMap[reflect.Int] = reflectInt
 	structTag.ParseMap[reflect.String] = reflectString
+}
+
+// SetTag set a new tag
+func SetTag(tag string) {
+	structTag.Tag = tag
+}
+
+// SetTagDefault set a new TagDefault to retorn default values
+func SetTagDefault(tag string) {
+	structTag.TagDefault = tag
 }
 
 // Parse config file
