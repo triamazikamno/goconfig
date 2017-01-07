@@ -2,7 +2,6 @@ package structTag
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 )
 
@@ -133,6 +132,7 @@ func ReflectStruct(field *reflect.StructField, value *reflect.Value, tag string)
 	return
 }
 
+/*
 // ReflectDebug used to debug tags
 func ReflectDebug(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
 	fmt.Printf("name: %v, value %v, Tag %v, TagDefault %v, type %v\n",
@@ -143,3 +143,4 @@ func ReflectDebug(field *reflect.StructField, value *reflect.Value, tag string) 
 		field.Type)
 	return
 }
+*/

@@ -1,14 +1,18 @@
 package structTag
 
 import (
+	"errors"
 	"reflect"
 	"strconv"
 	"testing"
 )
 
 type testStruct struct {
-	A int     `cfg:"A" cfgDefault:"100"`
-	B string  `cfg:"B" cfgDefault:"200"`
+	A int    `cfg:"A" cfgDefault:"100"`
+	B string `cfg:"B" cfgDefault:"200"`
+	C string
+	N string `cfg:"-"`
+	p string
 	S testSub `cfg:"S"`
 }
 
@@ -47,13 +51,23 @@ func reflectStringTestFunc(field *reflect.StructField, value *reflect.Value, tag
 	return
 }
 
+func reflectReturnError(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	err = errors.New("error test")
+	return
+}
+
 func TestParse(t *testing.T) {
+
+	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
+	err := Parse(s, "")
+	if err != ErrUndefinedTag {
+		t.Fatal("ErrUndefinedTag error expected")
+	}
+
 	Tag = "cfg"
 	TagDefault = "cfgDefault"
 
-	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
-
-	err := Parse(s, "")
+	err = Parse(s, "")
 	if err != ErrTypeNotSupported {
 		t.Fatal("ErrTypeNotSupported error expected")
 	}
@@ -62,7 +76,7 @@ func TestParse(t *testing.T) {
 	ParseMap[reflect.String] = reflectStringTestFunc
 	err = Parse(s, "")
 	if err != nil {
-		t.Fatal("teste", err)
+		t.Fatal(err)
 	}
 
 	if s.A != 100 ||
@@ -75,6 +89,13 @@ func TestParse(t *testing.T) {
 	}
 
 	//fmt.Printf("\n\nParse: %#v\n\n", s)
+
+	ParseMap[reflect.Int] = reflectReturnError
+	ParseMap[reflect.String] = reflectReturnError
+	err = Parse(s, "")
+	if err == nil {
+		t.Fatal("error expected")
+	}
 
 	s1 := "test"
 	err = Parse(s1, "")
