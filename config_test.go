@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/crgimenes/goConfig/structTag"
+	"github.com/crgimenes/goConfig/getEnv"
 )
 
 type testSub struct {
@@ -26,7 +26,7 @@ type testAux struct {
 
 func TestParseTags(t *testing.T) {
 	s := &testAux{A: 1, S: testSub{S1: 1, S2: 2, S3: "test"}}
-	err := structTag.Parse(s, "")
+	err := getEnv.Parse(s)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,12 +34,12 @@ func TestParseTags(t *testing.T) {
 	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
 
 	s1 := "test"
-	err = structTag.Parse(s1, "")
+	err = getEnv.Parse(s1)
 	if err == nil {
 		t.Fatal("Error expected")
 	}
 
-	err = structTag.Parse(&s1, "")
+	err = getEnv.Parse(&s1)
 	if err == nil {
 		t.Fatal("Error expected")
 	}
@@ -53,7 +53,7 @@ func TestParseTags(t *testing.T) {
     "port": 27017
   }
 */
-
+/*
 type mongoDB struct {
 	Host string
 	Port int
@@ -77,3 +77,4 @@ func TestLoad(t *testing.T) {
 	fmt.Printf("\n\nTestLoad: %#v\n\n", config)
 
 }
+*/
