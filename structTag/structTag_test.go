@@ -3,6 +3,7 @@ package structTag
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 	"testing"
 )
 
@@ -24,7 +25,28 @@ type testSubSub struct {
 	C string `cfg:"S" cfgDefault:"900"`
 }
 
-func ReflectTestFunc(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+func reflectIntTestFunc(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	newValue := field.Tag.Get(TagDefault)
+
+	if newValue == "" {
+		return
+	}
+
+	var intNewValue int64
+	intNewValue, err = strconv.ParseInt(newValue, 10, 64)
+	if err != nil {
+		return
+	}
+
+	value.SetInt(intNewValue)
+
+	return
+}
+
+func reflectStringTestFunc(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	newValue := field.Tag.Get(TagDefault)
+	value.SetString(newValue)
+
 	return
 }
 
@@ -39,8 +61,8 @@ func TestParse(t *testing.T) {
 		t.Fatal("ErrTypeNotSupported error expected")
 	}
 
-	ParseMap[reflect.Int] = ReflectTestFunc
-	ParseMap[reflect.String] = ReflectTestFunc
+	ParseMap[reflect.Int] = reflectIntTestFunc
+	ParseMap[reflect.String] = reflectStringTestFunc
 	err = Parse(s, "")
 	if err != nil {
 		t.Fatal("teste", err)
