@@ -93,7 +93,7 @@ func Parse(s interface{}, superTag string) (err error) {
 				return
 			}
 		} else {
-			log.Println("Type not supported" + kind.String())
+			log.Println("Type not supported", kind.String())
 			err = ErrTypeNotSupported
 			return
 		}
@@ -136,10 +136,11 @@ func ReflectStruct(field *reflect.StructField, value *reflect.Value, tag string)
 
 // ReflectDebug used to debug tags
 func ReflectDebug(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
-	fmt.Println("name:", field.Name,
-		"| value", value,
-		"| Tag:", field.Tag.Get(Tag),
-		"| TagDefault:", field.Tag.Get(TagDefault),
-		"| type:", field.Type)
+	fmt.Printf("name: %v, value %v, Tag %v, TagDefault %v, type %v\n",
+		field.Name,
+		value,
+		field.Tag.Get(Tag),
+		field.Tag.Get(TagDefault),
+		field.Type)
 	return
 }
