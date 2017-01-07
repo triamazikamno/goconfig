@@ -12,7 +12,6 @@ import (
 func init() {
 	structTag.ParseMap[reflect.Int] = reflectInt
 	structTag.ParseMap[reflect.String] = reflectString
-
 }
 
 // Parse config file

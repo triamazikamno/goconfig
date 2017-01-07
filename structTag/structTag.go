@@ -46,8 +46,6 @@ func init() {
 	ParseMap = make(map[reflect.Kind]ReflectFunc)
 
 	ParseMap[reflect.Struct] = reflectStruct
-	//ParseMap[reflect.Int] = reflectInt
-	//ParseMap[reflect.String] = reflectString
 
 }
 
