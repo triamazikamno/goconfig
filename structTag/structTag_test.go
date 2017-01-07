@@ -1,7 +1,6 @@
 package structTag
 
 import (
-	"fmt"
 	"reflect"
 	"strconv"
 	"testing"
@@ -15,14 +14,12 @@ type testStruct struct {
 
 type testSub struct {
 	A int        `cfg:"A" cfgDefault:"300"`
-	B int        `cfg:"B" cfgDefault:"400"`
-	C string     `cfg:"C" cfgDefault:"500"`
+	B string     `cfg:"C" cfgDefault:"400"`
 	S testSubSub `cfg:"S"`
 }
 type testSubSub struct {
-	A int    `cfg:"A" cfgDefault:"600"`
-	B int    `cfg:"B" cfgDefault:"700"`
-	C string `cfg:"S" cfgDefault:"900"`
+	A int    `cfg:"A" cfgDefault:"500"`
+	B string `cfg:"S" cfgDefault:"600"`
 }
 
 func reflectIntTestFunc(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
@@ -54,7 +51,7 @@ func TestParse(t *testing.T) {
 	Tag = "cfg"
 	TagDefault = "cfgDefault"
 
-	s := &testStruct{A: 1, S: testSub{A: 1, B: 2, C: "test"}}
+	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
 
 	err := Parse(s, "")
 	if err != ErrTypeNotSupported {
@@ -68,7 +65,16 @@ func TestParse(t *testing.T) {
 		t.Fatal("teste", err)
 	}
 
-	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
+	if s.A != 100 ||
+		s.B != "200" ||
+		s.S.A != 300 ||
+		s.S.B != "400" ||
+		s.S.S.A != 500 ||
+		s.S.S.B != "600" {
+		t.Fatal("Default value error")
+	}
+
+	//fmt.Printf("\n\nParse: %#v\n\n", s)
 
 	s1 := "test"
 	err = Parse(s1, "")

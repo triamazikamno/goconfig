@@ -3,7 +3,6 @@ package structTag
 import (
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 )
 
@@ -93,7 +92,7 @@ func Parse(s interface{}, superTag string) (err error) {
 				return
 			}
 		} else {
-			log.Println("Type not supported", kind.String())
+			//log.Println("Type not supported", kind.String())
 			err = ErrTypeNotSupported
 			return
 		}
