@@ -16,6 +16,9 @@ var ErrNotAStruct = errors.New("Not a struct")
 // ErrTypeNotSupported error when type not supported
 var ErrTypeNotSupported = errors.New("Type not supported")
 
+// ErrUndefinedTag error when Tag var is not defined
+var ErrUndefinedTag = errors.New("Undefined tag")
+
 // Tag set the main tag
 var Tag string
 
@@ -38,8 +41,6 @@ type ReflectFunc func(
 var ParseMap map[reflect.Kind]ReflectFunc
 
 func init() {
-	Tag = "cfg"
-	TagDefault = "cfgDefault"
 	TagDisabled = "-"
 	TagSeparator = "_"
 
@@ -51,6 +52,11 @@ func init() {
 
 //Parse tags on struct instance
 func Parse(s interface{}, superTag string) (err error) {
+
+	if Tag == "" {
+		err = ErrUndefinedTag
+		return
+	}
 
 	st := reflect.TypeOf(s)
 
