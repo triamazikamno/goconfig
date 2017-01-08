@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/crgimenes/goConfig/getEnv"
+	"github.com/crgimenes/goConfig/goEnv"
 )
 
 // Settings default
@@ -58,7 +58,7 @@ func Load(config interface{}) (err error) {
 		return
 	}
 
-	err = getEnv.Parse(config)
+	err = goEnv.Parse(config)
 	if err != nil {
 		return
 	}
