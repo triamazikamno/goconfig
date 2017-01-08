@@ -1,4 +1,4 @@
-package getEnv
+package goEnv
 
 import (
 	"os"
