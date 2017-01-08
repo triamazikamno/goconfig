@@ -10,7 +10,13 @@ import (
 	"github.com/crgimenes/goConfig/structTag"
 )
 
+var parametersStringMap map[*reflect.Value]*string
+var parametersIntMap map[*reflect.Value]*int
+
 func init() {
+	parametersStringMap = make(map[*reflect.Value]*string)
+	parametersIntMap = make(map[*reflect.Value]*int)
+
 	SetTag("flag")
 	SetTagDefault("flagDefault")
 
@@ -30,9 +36,21 @@ func SetTagDefault(tag string) {
 
 // Parse config file
 func Parse(config interface{}) (err error) {
+
 	err = structTag.Parse(config, "")
+	if err != nil {
+		return
+	}
 
 	flag.Parse()
+
+	for k, v := range parametersStringMap {
+		k.SetString(*v)
+	}
+
+	for k, v := range parametersIntMap {
+		k.SetInt(int64(*v))
+	}
 	return
 }
 
@@ -42,6 +60,7 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 	var aux int
 
 	flag.IntVar(&aux, strings.ToLower(tag), 0, "")
+	parametersIntMap[value] = &aux
 
 	return
 }
@@ -55,6 +74,7 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 	var aux string
 
 	flag.StringVar(&aux, strings.ToLower(tag), "", "")
+	parametersStringMap[value] = &aux
 
 	return
 }

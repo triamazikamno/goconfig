@@ -28,7 +28,14 @@ type testSubSub struct {
 func TestParse(t *testing.T) {
 
 	//os.Args = []string{"noop", "-flag1=val1", "arg1", "arg2"}
-	os.Args = []string{"program", "-h"}
+	//os.Args = []string{"program", "-h"}
+
+	os.Args = []string{
+		"program",
+		"-a=100",
+		"-b=TEST",
+		"-s_s_a=600",
+	}
 
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
 	err := Parse(s)
