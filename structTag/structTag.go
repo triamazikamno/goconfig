@@ -117,7 +117,6 @@ func updateTag(field *reflect.StructField, superTag string) (ret string) {
 
 	if ret == "" {
 		ret = field.Name
-		return
 	}
 
 	if superTag != "" {
