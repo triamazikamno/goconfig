@@ -2,34 +2,55 @@ package getEnv
 
 import (
 	"fmt"
+	"os"
 	"testing"
 )
 
-type testSub struct {
-	S1 int        `cfg:"S1" cfgDefault:"1"`
-	S2 int        `cfg:"S2"`
-	S3 string     `cfg:"S3"`
-	S4 testSubSub `cfg:"S4"`
-}
-type testSubSub struct {
-	SS1 int    `cfg:"SS1" cfgDefault:"2"`
-	SS2 int    `cfg:"SS2"`
-	SS3 string `cfg:"SS3"`
-}
-type testAux struct {
-	A int     `cfg:"A"`
-	B string  `cfg:"B"`
+type testStruct struct {
+	A int    `cfg:"A" cfgDefault:"100"`
+	B string `cfg:"B" cfgDefault:"200"`
+	C string
+	N string `cfg:"-"`
+	p string
 	S testSub `cfg:"S"`
 }
 
-func TestParseTags(t *testing.T) {
-	s := &testAux{A: 1, S: testSub{S1: 1, S2: 2, S3: "test"}}
+type testSub struct {
+	A int        `cfg:"A" cfgDefault:"300"`
+	B string     `cfg:"C" cfgDefault:"400"`
+	S testSubSub `cfg:"S"`
+}
+type testSubSub struct {
+	A int    `cfg:"A" cfgDefault:"500"`
+	B string `cfg:"S" cfgDefault:"600"`
+}
+
+func TestParse(t *testing.T) {
+
+	os.Setenv("A", "900")
+	os.Setenv("B", "TEST")
+
+	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
 	err := Parse(s)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
+
+	os.Setenv("A", "900ERROR")
+
+	err = Parse(s)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
+
+	os.Setenv("A", "")
+
+	err = Parse(s)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	s1 := "test"
 	err = Parse(s1)
@@ -42,37 +63,3 @@ func TestParseTags(t *testing.T) {
 		t.Fatal("Error expected")
 	}
 }
-
-/*
-{
-  "domain": "www.example.com",
-  "mongodb": {
-    "host": "localhost",
-    "port": 27017
-  }
-*/
-/*
-type mongoDB struct {
-	Host string
-	Port int
-}
-
-type configTest struct {
-	Domain  string
-	MongoDB mongoDB
-}
-
-func TestLoad(t *testing.T) {
-
-	Setup.Path = "./examples/"
-	//config := configTest{Domain: "test", MongoDB: mongoDB{}}
-	config := configTest{}
-	err := Load(&config)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	fmt.Printf("\n\nTestLoad: %#v\n\n", config)
-
-}
-*/
