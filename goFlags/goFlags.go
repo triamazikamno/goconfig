@@ -84,8 +84,6 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 
 func reflectString(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
 
-	// get value from default settings
-	//ret = field.Tag.Get(structTag.TagDefault)
 	var aux string
 	var defaltValue string
 	defaltValue = field.Tag.Get(structTag.TagDefault)
