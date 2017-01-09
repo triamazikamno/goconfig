@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/crgimenes/goConfig/goEnv"
+	"github.com/crgimenes/goConfig/goFlags"
 )
 
 // Settings default
@@ -29,6 +30,27 @@ func init() {
 	}
 }
 
+// Load config file
+func Load(config interface{}) (err error) {
+
+	err = LoadJSON(config)
+	if err != nil {
+		return
+	}
+
+	err = goEnv.Parse(config)
+	if err != nil {
+		return
+	}
+
+	err = goFlags.Parse(config)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // LoadJSON config file
 func LoadJSON(config interface{}) (err error) {
 	configFile := Setup.Path + Setup.File
@@ -43,22 +65,6 @@ func LoadJSON(config interface{}) (err error) {
 
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&config)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-// Load config file
-func Load(config interface{}) (err error) {
-
-	err = LoadJSON(config)
-	if err != nil {
-		return
-	}
-
-	err = goEnv.Parse(config)
 	if err != nil {
 		return
 	}
