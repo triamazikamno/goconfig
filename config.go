@@ -30,8 +30,8 @@ func init() {
 	}
 }
 
-// Load config file
-func Load(config interface{}) (err error) {
+// Parse configuration
+func Parse(config interface{}) (err error) {
 
 	err = LoadJSON(config)
 	if err != nil {

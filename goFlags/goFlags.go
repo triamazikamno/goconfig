@@ -3,6 +3,7 @@ package goFlags
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"flag"
@@ -34,7 +35,7 @@ func SetTagDefault(tag string) {
 	structTag.TagDefault = tag
 }
 
-// Parse config file
+// Parse configuration
 func Parse(config interface{}) (err error) {
 
 	err = structTag.Parse(config, "")
@@ -45,22 +46,38 @@ func Parse(config interface{}) (err error) {
 	flag.Parse()
 
 	for k, v := range parametersStringMap {
+		fmt.Printf("- \"%v\"\n", *v)
 		k.SetString(*v)
 	}
 
 	for k, v := range parametersIntMap {
+		fmt.Printf("- \"%v\"\n", int64(*v))
 		k.SetInt(int64(*v))
+
 	}
 	return
 }
 
 func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
-	fmt.Println(tag)
-
 	var aux int
+	var defaltValue string
+	var defaltValueInt int
 
-	flag.IntVar(&aux, strings.ToLower(tag), 0, "")
+	defaltValue = field.Tag.Get(structTag.TagDefault)
+
+	if defaltValue == "" || defaltValue == "0" {
+		defaltValueInt = 0
+	} else {
+		defaltValueInt, err = strconv.Atoi(defaltValue)
+		if err != nil {
+			return
+		}
+	}
+
+	flag.IntVar(&aux, strings.ToLower(tag), defaltValueInt, "")
 	parametersIntMap[value] = &aux
+
+	fmt.Println(tag, defaltValue)
 
 	return
 }
@@ -69,12 +86,14 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 
 	// get value from default settings
 	//ret = field.Tag.Get(structTag.TagDefault)
-	fmt.Println(tag)
-
 	var aux string
+	var defaltValue string
+	defaltValue = field.Tag.Get(structTag.TagDefault)
 
-	flag.StringVar(&aux, strings.ToLower(tag), "", "")
+	flag.StringVar(&aux, strings.ToLower(tag), defaltValue, "")
 	parametersStringMap[value] = &aux
+
+	fmt.Println(tag, defaltValue)
 
 	return
 }

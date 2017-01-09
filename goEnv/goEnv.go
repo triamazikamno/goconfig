@@ -27,7 +27,7 @@ func SetTagDefault(tag string) {
 	structTag.TagDefault = tag
 }
 
-// Parse config file
+// Parse configuration
 func Parse(config interface{}) (err error) {
 	err = structTag.Parse(config, "")
 	return
