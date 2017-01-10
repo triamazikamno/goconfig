@@ -45,6 +45,9 @@ func Parse(config interface{}) (err error) {
 
 	flag.Parse()
 
+	//fmt.Printf("%v#f", flag.CommandLine)
+	flag.Visit(visitTest)
+
 	for k, v := range parametersStringMap {
 		fmt.Printf("- \"%v\"\n", *v)
 		k.SetString(*v)
@@ -56,6 +59,10 @@ func Parse(config interface{}) (err error) {
 
 	}
 	return
+}
+
+func visitTest(f *flag.Flag) {
+	fmt.Printf("name \"%v\"\n", f.Name)
 }
 
 func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
