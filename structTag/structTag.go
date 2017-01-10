@@ -39,13 +39,22 @@ type ReflectFunc func(
 var ParseMap map[reflect.Kind]ReflectFunc
 
 func init() {
+	Setup()
+}
+
+// Setup maps and variables
+func Setup() {
 	TagDisabled = "-"
 	TagSeparator = "_"
 
 	ParseMap = make(map[reflect.Kind]ReflectFunc)
 
 	ParseMap[reflect.Struct] = ReflectStruct
+}
 
+// Reset maps caling setup function
+func Reset() {
+	Setup()
 }
 
 //Parse tags on struct instance
