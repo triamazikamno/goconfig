@@ -18,12 +18,14 @@ type parameterMeta struct {
 }
 
 var parametersMetaMap map[*reflect.Value]parameterMeta
+var visitedMap map[string]*flag.Flag
 
 // Preserve disable default values and get only visited parameters thus preserving the values passed in the structure, default false
 var Preserve bool
 
 func init() {
 	parametersMetaMap = make(map[*reflect.Value]parameterMeta)
+	visitedMap = make(map[string]*flag.Flag)
 
 	SetTag("flag")
 	SetTagDefault("flagDefault")
@@ -52,9 +54,12 @@ func Parse(config interface{}) (err error) {
 
 	flag.Parse()
 
-	flag.Visit(visitTest)
+	flag.Visit(loadVisit)
 
 	for k, v := range parametersMetaMap {
+		if _, ok := visitedMap[v.Tag]; !ok && Preserve {
+			continue
+		}
 		switch v.Kind {
 		case reflect.String:
 			value := *v.Value.(*string)
@@ -71,8 +76,9 @@ func Parse(config interface{}) (err error) {
 	return
 }
 
-func visitTest(f *flag.Flag) {
+func loadVisit(f *flag.Flag) {
 	fmt.Printf("name \"%v\"\n", f.Name)
+	visitedMap[f.Name] = f
 }
 
 func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
