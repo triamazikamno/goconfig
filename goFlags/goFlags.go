@@ -2,6 +2,7 @@ package goFlags
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -24,6 +25,11 @@ var visitedMap map[string]*flag.Flag
 var Preserve bool
 
 func init() {
+	Setup()
+}
+
+// Setup maps and variables
+func Setup() {
 	parametersMetaMap = make(map[*reflect.Value]parameterMeta)
 	visitedMap = make(map[string]*flag.Flag)
 
@@ -74,6 +80,15 @@ func Parse(config interface{}) (err error) {
 	}
 
 	return
+}
+
+// Reset maps caling setup function
+func Reset() {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	flag.Usage = nil
+
+	structTag.Reset()
+	Setup()
 }
 
 func loadVisit(f *flag.Flag) {
