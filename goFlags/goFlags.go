@@ -11,15 +11,19 @@ import (
 	"github.com/crgimenes/goConfig/structTag"
 )
 
-var parametersStringMap map[*reflect.Value]*string
-var parametersIntMap map[*reflect.Value]*int
+type parameterMeta struct {
+	Kind  reflect.Kind
+	Value interface{}
+	Tag   string
+}
+
+var parametersMetaMap map[*reflect.Value]parameterMeta
 
 // Preserve disable default values and get only visited parameters thus preserving the values passed in the structure, default false
 var Preserve bool
 
 func init() {
-	parametersStringMap = make(map[*reflect.Value]*string)
-	parametersIntMap = make(map[*reflect.Value]*int)
+	parametersMetaMap = make(map[*reflect.Value]parameterMeta)
 
 	SetTag("flag")
 	SetTagDefault("flagDefault")
@@ -48,19 +52,22 @@ func Parse(config interface{}) (err error) {
 
 	flag.Parse()
 
-	//fmt.Printf("%v#f", flag.CommandLine)
 	flag.Visit(visitTest)
 
-	for k, v := range parametersStringMap {
-		fmt.Printf("- \"%v\"\n", *v)
-		k.SetString(*v)
+	for k, v := range parametersMetaMap {
+		switch v.Kind {
+		case reflect.String:
+			value := *v.Value.(*string)
+			fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
+			k.SetString(value)
+		case reflect.Int:
+			value := *v.Value.(*int)
+			fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
+			k.SetInt(int64(value))
+
+		}
 	}
 
-	for k, v := range parametersIntMap {
-		fmt.Printf("- \"%v\"\n", int64(*v))
-		k.SetInt(int64(*v))
-
-	}
 	return
 }
 
@@ -84,8 +91,13 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 		}
 	}
 
-	flag.IntVar(&aux, strings.ToLower(tag), defaltValueInt, "")
-	parametersIntMap[value] = &aux
+	meta := parameterMeta{}
+	meta.Value = &aux
+	meta.Tag = strings.ToLower(tag)
+	meta.Kind = reflect.Int
+	parametersMetaMap[value] = meta
+
+	flag.IntVar(&aux, meta.Tag, defaltValueInt, "")
 
 	fmt.Println(tag, defaltValue)
 
@@ -98,8 +110,13 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 	var defaltValue string
 	defaltValue = field.Tag.Get(structTag.TagDefault)
 
-	flag.StringVar(&aux, strings.ToLower(tag), defaltValue, "")
-	parametersStringMap[value] = &aux
+	meta := parameterMeta{}
+	meta.Value = &aux
+	meta.Tag = strings.ToLower(tag)
+	meta.Kind = reflect.String
+	parametersMetaMap[value] = meta
+
+	flag.StringVar(&aux, meta.Tag, defaltValue, "")
 
 	fmt.Println(tag, defaltValue)
 
