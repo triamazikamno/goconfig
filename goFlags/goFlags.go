@@ -14,6 +14,9 @@ import (
 var parametersStringMap map[*reflect.Value]*string
 var parametersIntMap map[*reflect.Value]*int
 
+// Preserve disable default values and get only visited parameters thus preserving the values passed in the structure, default false
+var Preserve bool
+
 func init() {
 	parametersStringMap = make(map[*reflect.Value]*string)
 	parametersIntMap = make(map[*reflect.Value]*int)
