@@ -9,7 +9,9 @@ import (
 	"github.com/crgimenes/goConfig/structTag"
 )
 
-func init() {
+// Setup maps and variables
+func Setup() {
+	structTag.Setup()
 	SetTag("env")
 	SetTagDefault("envDefault")
 
