@@ -38,11 +38,14 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
+	goEnv.Setup()
 	err = goEnv.Parse(config)
 	if err != nil {
 		return
 	}
 
+	goFlags.Setup()
+	goFlags.Preserve = true
 	err = goFlags.Parse(config)
 	if err != nil {
 		return
