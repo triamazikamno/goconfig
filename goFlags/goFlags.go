@@ -24,15 +24,12 @@ var visitedMap map[string]*flag.Flag
 // Preserve disable default values and get only visited parameters thus preserving the values passed in the structure, default false
 var Preserve bool
 
-func init() {
-	Setup()
-}
-
 // Setup maps and variables
 func Setup() {
 	parametersMetaMap = make(map[*reflect.Value]parameterMeta)
 	visitedMap = make(map[string]*flag.Flag)
 
+	structTag.Setup()
 	SetTag("flag")
 	SetTagDefault("flagDefault")
 
@@ -92,7 +89,6 @@ func Reset() {
 }
 
 func loadVisit(f *flag.Flag) {
-	fmt.Printf("name \"%v\"\n", f.Name)
 	visitedMap[f.Name] = f
 }
 
@@ -120,7 +116,7 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 
 	flag.IntVar(&aux, meta.Tag, defaltValueInt, "")
 
-	fmt.Println(tag, defaltValue)
+	//fmt.Println(tag, defaltValue)
 
 	return
 }
@@ -139,7 +135,7 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 
 	flag.StringVar(&aux, meta.Tag, defaltValue, "")
 
-	fmt.Println(tag, defaltValue)
+	//fmt.Println(tag, defaltValue)
 
 	return
 }
