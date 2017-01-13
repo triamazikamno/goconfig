@@ -25,13 +25,13 @@ var visitedMap map[string]*flag.Flag
 var Preserve bool
 
 // Setup maps and variables
-func Setup() {
+func Setup(tag string, tagDefault string) {
 	parametersMetaMap = make(map[*reflect.Value]parameterMeta)
 	visitedMap = make(map[string]*flag.Flag)
 
 	structTag.Setup()
-	SetTag("flag")
-	SetTagDefault("flagDefault")
+	SetTag(tag)
+	SetTagDefault(tagDefault)
 
 	structTag.ParseMap[reflect.Int] = reflectInt
 	structTag.ParseMap[reflect.String] = reflectString
@@ -85,7 +85,7 @@ func Reset() {
 	flag.Usage = nil
 
 	structTag.Reset()
-	Setup()
+	Setup(structTag.Tag, structTag.TagDefault)
 }
 
 func loadVisit(f *flag.Flag) {

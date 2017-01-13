@@ -10,10 +10,11 @@ import (
 )
 
 // Setup maps and variables
-func Setup() {
+func Setup(tag string, tagDefault string) {
+	
 	structTag.Setup()
-	SetTag("env")
-	SetTagDefault("envDefault")
+	SetTag(tag)
+	SetTagDefault(tagDefault)
 
 	structTag.ParseMap[reflect.Int] = reflectInt
 	structTag.ParseMap[reflect.String] = reflectString
