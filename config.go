@@ -19,6 +19,9 @@ type Settings struct {
 	FileRequired bool
 }
 
+const tag = "cfg"
+const tagDefault = "cfgDefault"
+
 // Setup Pointer to internal variables
 var Setup *Settings
 
@@ -38,13 +41,13 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
-	goEnv.Setup()
+	goEnv.Setup(tag, tagDefault)
 	err = goEnv.Parse(config)
 	if err != nil {
 		return
 	}
 
-	goFlags.Setup()
+	goFlags.Setup(tag, tagDefault)
 	goFlags.Preserve = true
 	err = goFlags.Parse(config)
 	if err != nil {
