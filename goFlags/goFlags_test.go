@@ -1,7 +1,6 @@
 package goFlags
 
 import (
-	"fmt"
 	"os"
 	"testing"
 )
@@ -11,6 +10,7 @@ type testStruct struct {
 	B string `flag:"B" flagDefault:"200"`
 	C string
 	N string `flag:"-"`
+	M int
 	p string
 	S testSub `flag:"S"`
 }
@@ -20,6 +20,7 @@ type testSub struct {
 	B string     `flag:"C" flagDefault:"400"`
 	S testSubSub `flag:"S"`
 }
+
 type testSubSub struct {
 	A int    `flag:"A" flagDefault:"500"`
 	B string `flag:"S" flagDefault:"600"`
@@ -30,11 +31,13 @@ func TestParse(t *testing.T) {
 	//os.Args = []string{"noop", "-flag1=val1", "arg1", "arg2"}
 	//os.Args = []string{"program", "-h"}
 
+	Setup("flag", "flagDefault")
+
 	os.Args = []string{
 		"program",
-		"-a=8888",
+		"-a=900",
 		"-b=TEST",
-		"-s_s_a=9999",
+		"-s_s_a=99999",
 	}
 
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
@@ -45,15 +48,18 @@ func TestParse(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
-
-	Reset()
-	err = Parse(s)
-	if err != nil {
-		t.Fatal(err)
+	if s.A != 900 {
+		t.Fatal("s.A != 900, s.A:", s.A)
 	}
 
-	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
+	if s.B != "TEST" {
+		t.Fatal("s.B != \"TEST\", s.B:", s.B)
+	}
+
+	if s.S.S.A != 99999 {
+		t.Fatal("s.S.S.A != 99999, s.S.S.A :", s.S.S.A)
+	}
+
 }
 
 func TestPreserve(t *testing.T) {
@@ -65,7 +71,7 @@ func TestPreserve(t *testing.T) {
 		"program",
 		"-a=8888",
 		"-b=TEST",
-		"-s_s_a=9999",
+		"-s_s_a=99999",
 	}
 
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
@@ -77,5 +83,19 @@ func TestPreserve(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("\n\nTestPreserve: %#v\n\n", s)
+	if s.S.A != 1 {
+		t.Fatal("s.S.A != 1, s.S.A:", s.S.A)
+	}
+
+	if s.A != 8888 {
+		t.Fatal("s.A != 8888, s.A:", s.A)
+	}
+
+	if s.B != "TEST" {
+		t.Fatal("s.B != \"TEST\", s.B:", s.B)
+	}
+
+	if s.S.S.A != 99999 {
+		t.Fatal("s.S.S.A != 99999, s.S.S.A:", s.S.S.A)
+	}
 }
