@@ -1,7 +1,6 @@
 package goFlags
 
 import (
-	"fmt"
 	"os"
 	"reflect"
 	"strconv"
@@ -66,11 +65,11 @@ func Parse(config interface{}) (err error) {
 		switch v.Kind {
 		case reflect.String:
 			value := *v.Value.(*string)
-			fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
+			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
 			k.SetString(value)
 		case reflect.Int:
 			value := *v.Value.(*int)
-			fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
+			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
 			k.SetInt(int64(value))
 
 		}
