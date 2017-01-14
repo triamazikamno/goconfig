@@ -1,7 +1,6 @@
 package goEnv
 
 import (
-	"fmt"
 	"os"
 	"testing"
 )
@@ -11,6 +10,7 @@ type testStruct struct {
 	B string `cfg:"B" cfgDefault:"200"`
 	C string
 	N string `cfg:"-"`
+	M int
 	p string
 	S testSub `cfg:"S"`
 }
@@ -27,6 +27,8 @@ type testSubSub struct {
 
 func TestParse(t *testing.T) {
 
+	Setup("cfg", "cfgDefault")
+
 	os.Setenv("A", "900")
 	os.Setenv("B", "TEST")
 
@@ -35,8 +37,6 @@ func TestParse(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
 
 	os.Setenv("A", "900ERROR")
 
