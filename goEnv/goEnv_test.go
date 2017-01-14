@@ -20,6 +20,7 @@ type testSub struct {
 	B string     `cfg:"C" cfgDefault:"400"`
 	S testSubSub `cfg:"S"`
 }
+
 type testSubSub struct {
 	A int    `cfg:"A" cfgDefault:"500"`
 	B string `cfg:"S" cfgDefault:"600"`
@@ -38,6 +39,18 @@ func TestParse(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if s.A != 900 {
+		t.Fatal("s.A != 900, s.A:", s.A)
+	}
+
+	if s.B != "TEST" {
+		t.Fatal("s.B != \"TEST\", s.B:", s.B)
+	}
+
+	if s.S.S.B != "600" {
+		t.Fatal("s.S.S.B != \"600\", s.S.S.B:", s.S.S.B)
+	}
+
 	os.Setenv("A", "900ERROR")
 
 	err = Parse(s)
@@ -50,6 +63,10 @@ func TestParse(t *testing.T) {
 	err = Parse(s)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if s.A != 100 {
+		t.Fatal("s.A != 100, s.A:", s.A)
 	}
 
 	s1 := "test"
