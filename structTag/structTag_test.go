@@ -58,6 +58,8 @@ func reflectReturnError(field *reflect.StructField, value *reflect.Value, tag st
 
 func TestParse(t *testing.T) {
 
+	Setup()
+
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
 	err := Parse(s, "")
 	if err != ErrUndefinedTag {
