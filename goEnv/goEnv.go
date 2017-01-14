@@ -11,7 +11,7 @@ import (
 
 // Setup maps and variables
 func Setup(tag string, tagDefault string) {
-	
+
 	structTag.Setup()
 	SetTag(tag)
 	SetTagDefault(tagDefault)
@@ -69,6 +69,9 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 
 func reflectString(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
 	newValue := getNewValue(field, value, tag)
+	if newValue == "" {
+		return
+	}
 
 	value.SetString(newValue)
 
