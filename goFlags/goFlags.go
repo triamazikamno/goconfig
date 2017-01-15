@@ -1,6 +1,7 @@
 package goFlags
 
 import (
+	"fmt"
 	"os"
 	"reflect"
 	"strconv"
@@ -23,8 +24,12 @@ var visitedMap map[string]*flag.Flag
 // Preserve disable default values and get only visited parameters thus preserving the values passed in the structure, default false
 var Preserve bool
 
+var Usage func()
+
 // Setup maps and variables
 func Setup(tag string, tagDefault string) {
+	Usage = DefaultUsage
+
 	parametersMetaMap = make(map[*reflect.Value]parameterMeta)
 	visitedMap = make(map[string]*flag.Flag)
 
@@ -137,4 +142,14 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 	//fmt.Println(tag, defaltValue)
 
 	return
+}
+
+func PrintDefaults() {
+	flag.PrintDefaults()
+
+}
+
+func DefaultUsage() {
+	fmt.Println("Usage")
+	PrintDefaults()
 }

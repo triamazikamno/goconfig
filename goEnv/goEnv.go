@@ -1,6 +1,7 @@
 package goEnv
 
 import (
+	"fmt"
 	"os"
 	"reflect"
 	"strconv"
@@ -9,8 +10,11 @@ import (
 	"github.com/crgimenes/goConfig/structTag"
 )
 
+var Usage func()
+
 // Setup maps and variables
 func Setup(tag string, tagDefault string) {
+	Usage = DefaultUsage
 
 	structTag.Setup()
 	SetTag(tag)
@@ -76,4 +80,14 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 	value.SetString(newValue)
 
 	return
+}
+
+func PrintDefaults() {
+	fmt.Println("test")
+
+}
+
+func DefaultUsage() {
+	fmt.Println("Usage")
+	PrintDefaults()
 }
