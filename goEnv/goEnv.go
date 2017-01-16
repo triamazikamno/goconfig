@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 
 	"github.com/crgimenes/goConfig/structTag"
 )
 
+// Usage is the function that is called when an error occurs.
 var Usage func()
 
 // Setup maps and variables
@@ -40,22 +42,44 @@ func Parse(config interface{}) (err error) {
 	return
 }
 
-func getNewValue(field *reflect.StructField, value *reflect.Value, tag string) (ret string) {
+var PrintDefaultsOutput string
+
+func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, datatype string) (ret string) {
+
+	defaultValue := field.Tag.Get(structTag.TagDefault)
+
+	// create PrintDefaults output
+	tag = strings.ToUpper(tag)
+	if runtime.GOOS == "windows" {
+		if defaultValue == "" {
+			PrintDefaultsOutput += "  %" + tag + "% " + datatype + "\n\n"
+		} else {
+			printDV := " (default \"" + defaultValue + "\")"
+			PrintDefaultsOutput += "  %" + tag + "% " + datatype + "\n\t" + printDV + "\n"
+		}
+	} else {
+		if defaultValue == "" {
+			PrintDefaultsOutput += "  $" + tag + " " + datatype + "\n\n"
+		} else {
+			printDV := " (default \"" + defaultValue + "\")"
+			PrintDefaultsOutput += "  $" + tag + " " + datatype + "\n\t" + printDV + "\n"
+		}
+	}
 
 	// get value from environment variable
-	ret = os.Getenv(strings.ToUpper(tag))
+	ret = os.Getenv(tag)
 	if ret != "" {
 		return
 	}
 
 	// get value from default settings
-	ret = field.Tag.Get(structTag.TagDefault)
+	ret = defaultValue
 
 	return
 }
 
 func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
-	newValue := getNewValue(field, value, tag)
+	newValue := getNewValue(field, value, tag, "int")
 	if newValue == "" {
 		return
 	}
@@ -72,7 +96,7 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 }
 
 func reflectString(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
-	newValue := getNewValue(field, value, tag)
+	newValue := getNewValue(field, value, tag, "string")
 	if newValue == "" {
 		return
 	}
@@ -83,7 +107,8 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 }
 
 func PrintDefaults() {
-	fmt.Println("test")
+	fmt.Println("Environment variables:")
+	fmt.Println(PrintDefaultsOutput)
 
 }
 
