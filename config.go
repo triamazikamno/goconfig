@@ -22,6 +22,8 @@ var File string
 // FileRequired config file required
 var FileRequired bool
 
+var HelpString string
+
 var Usage func()
 
 func init() {
@@ -33,6 +35,13 @@ func init() {
 
 // Parse configuration
 func Parse(config interface{}) (err error) {
+
+	var helpAux []byte
+	helpAux, err = json.Marshal(config)
+	if err != nil {
+		return
+	}
+	HelpString = string(helpAux)
 
 	err = LoadJSON(config)
 	if err != nil {
@@ -105,7 +114,8 @@ func Save(config interface{}) (err error) {
 }
 
 func PrintDefaults() {
-	fmt.Println("test")
+	fmt.Println("Config file:", Path+File)
+	fmt.Println(HelpString)
 }
 
 func DefaultUsage() {
@@ -113,5 +123,4 @@ func DefaultUsage() {
 	goFlags.PrintDefaults()
 	goEnv.PrintDefaults()
 	PrintDefaults()
-
 }
