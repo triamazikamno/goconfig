@@ -17,7 +17,7 @@ func main() {
 	fmt.Println("init")
 
 	config := configTest{}
-	err := goConfig.Load(&config)
+	err := goConfig.Parse(&config)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -26,5 +26,4 @@ func main() {
 	fmt.Printf("\n\n%#v\n\n", config)
 
 	fmt.Println("end")
-
 }
