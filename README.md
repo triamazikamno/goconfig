@@ -3,6 +3,12 @@
 
 Load settings form parameters, environment variables and a configuration file.
 
+## Install
+
+```
+go get github.com/crgimenes/goConfig
+```
+
 ## Example
 
 ```go
