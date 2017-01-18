@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/crgimenes/goConfig/branch/master/graph/badge.svg)](https://codecov.io/gh/crgimenes/goConfig)
 [![GoDoc](https://godoc.org/github.com/crgimenes/goConfig?status.png)](https://godoc.org/github.com/crgimenes/goConfig)
 
-Load settings form parameters, environment variables and a configuration file.
+goConfig uses a struct as input and populates the fields of this struct with parameters fom command line, environment variables and configuration file.
 
 ## Install
 
