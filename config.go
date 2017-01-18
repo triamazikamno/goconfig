@@ -36,13 +36,6 @@ func init() {
 // Parse configuration
 func Parse(config interface{}) (err error) {
 
-	var helpAux []byte
-	helpAux, err = json.Marshal(config)
-	if err != nil {
-		return
-	}
-	HelpString = string(helpAux)
-
 	err = LoadJSON(config)
 	if err != nil {
 		return
@@ -54,7 +47,10 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
+	prepareHelp(config)
+
 	goFlags.Setup(tag, tagDefault)
+	goFlags.Usage = Usage
 	goFlags.Preserve = true
 	err = goFlags.Parse(config)
 	if err != nil {
@@ -113,8 +109,18 @@ func Save(config interface{}) (err error) {
 	return
 }
 
+func prepareHelp(config interface{}) (err error) {
+	var helpAux []byte
+	helpAux, err = json.MarshalIndent(config, "", "    ")
+	if err != nil {
+		return
+	}
+	HelpString = string(helpAux)
+	return
+}
+
 func PrintDefaults() {
-	fmt.Println("Config file:", Path+File)
+	fmt.Printf("Config file %q:\n", Path+File)
 	fmt.Println(HelpString)
 }
 

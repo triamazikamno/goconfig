@@ -29,7 +29,6 @@ var Usage func()
 // Setup maps and variables
 func Setup(tag string, tagDefault string) {
 	Usage = DefaultUsage
-
 	parametersMetaMap = make(map[*reflect.Value]parameterMeta)
 	visitedMap = make(map[string]*flag.Flag)
 
@@ -53,7 +52,7 @@ func SetTagDefault(tag string) {
 
 // Parse configuration
 func Parse(config interface{}) (err error) {
-
+	flag.Usage = Usage
 	err = structTag.Parse(config, "")
 	if err != nil {
 		return
