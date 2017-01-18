@@ -1,9 +1,9 @@
 # goConfig
 [![Build Status](https://travis-ci.org/crgimenes/goConfig.svg?branch=master)](https://travis-ci.org/crgimenes/goConfig)
-[![wercker status](https://app.wercker.com/status/2c0e2277805081a84a71f2679bc0e014/s/master "wercker status")](https://app.wercker.com/project/byKey/2c0e2277805081a84a71f2679bc0e014)
 [![Go Report Card](https://goreportcard.com/badge/github.com/crgimenes/goConfig)](https://goreportcard.com/report/github.com/crgimenes/goConfig)
 [![codecov](https://codecov.io/gh/crgimenes/goConfig/branch/master/graph/badge.svg)](https://codecov.io/gh/crgimenes/goConfig)
 [![GoDoc](https://godoc.org/github.com/crgimenes/goConfig?status.png)](https://godoc.org/github.com/crgimenes/goConfig)
+[![Go project version](https://badge.fury.io/go/github.com%2Fcrgimenes%2FgoConfig.svg)](https://badge.fury.io/go/github.com%2Fcrgimenes%2FgoConfig)
 
 goConfig uses a struct as input and populates the fields of this struct with parameters fom command line, environment variables and configuration file.
 
