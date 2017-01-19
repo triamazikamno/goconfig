@@ -52,10 +52,10 @@ func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, d
 	tag = strings.ToUpper(tag)
 	if runtime.GOOS == "windows" {
 		if defaultValue == "" {
-			PrintDefaultsOutput += "  %" + tag + "% " + datatype + "\n\n"
+			PrintDefaultsOutput += `  %` + tag + `% ` + datatype + "\n\n"
 		} else {
 			printDV := " (default \"" + defaultValue + "\")"
-			PrintDefaultsOutput += "  %" + tag + "% " + datatype + "\n\t" + printDV + "\n"
+			PrintDefaultsOutput += `  %` + tag + `% ` + datatype + "\n\t" + printDV + "\n"
 		}
 	} else {
 		if defaultValue == "" {
