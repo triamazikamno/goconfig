@@ -77,7 +77,6 @@ func Parse(s interface{}, superTag string) (err error) {
 		return
 	}
 
-	//vt := reflect.ValueOf(s)
 	refValue := reflect.ValueOf(s).Elem()
 	for i := 0; i < refField.NumField(); i++ {
 		field := refField.Field(i)
@@ -99,20 +98,10 @@ func Parse(s interface{}, superTag string) (err error) {
 				return
 			}
 		} else {
-			//log.Println("Type not supported", kind.String())
 			err = ErrTypeNotSupported
 			return
 		}
-
-		/*
-			fmt.Println("name:", field.Name,
-				"| value", value,
-				"| cfg:", field.Tag.Get(Setup.Tag),
-				"| cfgDefault:", field.Tag.Get(Setup.TagDefault),
-				"| type:", field.Type)
-		*/
 	}
-
 	return
 }
 
