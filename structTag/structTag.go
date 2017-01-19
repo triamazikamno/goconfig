@@ -38,9 +38,6 @@ type ReflectFunc func(
 // ParseMap points to each of the supported types
 var ParseMap map[reflect.Kind]ReflectFunc
 
-func init() {
-}
-
 // Setup maps and variables
 func Setup() {
 	TagDisabled = "-"
