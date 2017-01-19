@@ -10,8 +10,11 @@ import (
 	"github.com/crgimenes/goConfig/goFlags"
 )
 
-const tag = "cfg"
-const tagDefault = "cfgDefault"
+// Tag to set main name of field
+var Tag = "cfg"
+
+// Tag to set default value
+var TagDefault = "cfgDefault"
 
 // Path sets default config path
 var Path string
@@ -41,7 +44,7 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
-	goEnv.Setup(tag, tagDefault)
+	goEnv.Setup(Tag, TagDefault)
 	err = goEnv.Parse(config)
 	if err != nil {
 		return
@@ -49,7 +52,7 @@ func Parse(config interface{}) (err error) {
 
 	prepareHelp(config)
 
-	goFlags.Setup(tag, tagDefault)
+	goFlags.Setup(Tag, TagDefault)
 	goFlags.Usage = Usage
 	goFlags.Preserve = true
 	err = goFlags.Parse(config)
