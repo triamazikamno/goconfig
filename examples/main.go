@@ -8,15 +8,21 @@ type mongoDB struct {
 	Port int    `cfgDefault:"999"`
 }
 
+type SystemUser struct {
+	Name     string `cfg:"name"`
+	Password string `cfg:"passwd"`
+}
+
 type configTest struct {
 	Domain  string
+	User    SystemUser `cfg:"user"`
 	MongoDB mongoDB
 }
 
 func main() {
 	fmt.Println("init")
-
 	config := configTest{}
+
 	err := goConfig.Parse(&config)
 	if err != nil {
 		fmt.Println(err)
