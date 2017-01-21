@@ -24,6 +24,10 @@ var visitedMap map[string]*flag.Flag
 // Preserve disable default values and get only visited parameters thus preserving the values passed in the structure, default false
 var Preserve bool
 
+// Prefix is a string that would be placed at the beginning of the generated tags.
+var Prefix string
+
+//Usage is a function to show the help, can be replaced by your own version.
 var Usage func()
 
 // Setup maps and variables
@@ -33,6 +37,7 @@ func Setup(tag string, tagDefault string) {
 	visitedMap = make(map[string]*flag.Flag)
 
 	structTag.Setup()
+	structTag.Prefix = Prefix
 	SetTag(tag)
 	SetTagDefault(tagDefault)
 

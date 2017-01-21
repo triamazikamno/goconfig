@@ -28,6 +28,12 @@ var FileRequired bool
 // HelpString temporarily saves help
 var HelpString string
 
+// PrefixFlag is a string that would be placed at the beginning of the generated Flag tags.
+var PrefixFlag string
+
+// PrefixEnv is a string that would be placed at the beginning of the generated Event tags.
+var PrefixEnv string
+
 //Usage is a function to show the help, can be replaced by your own version.
 var Usage func()
 
@@ -46,6 +52,7 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
+	goEnv.Prefix = PrefixEnv
 	goEnv.Setup(Tag, TagDefault)
 	err = goEnv.Parse(config)
 	if err != nil {
@@ -57,6 +64,7 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
+	goFlags.Prefix = PrefixFlag
 	goFlags.Setup(Tag, TagDefault)
 	goFlags.Usage = Usage
 	goFlags.Preserve = true

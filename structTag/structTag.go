@@ -29,6 +29,9 @@ var TagDisabled string
 // TagSeparator separe names on environment variables
 var TagSeparator string
 
+// Prefix is a string that would be placed at the beginning of the generated tags.
+var Prefix string
+
 // ReflectFunc type used to create funcrions to parse struct and tags
 type ReflectFunc func(
 	field *reflect.StructField,
@@ -115,6 +118,10 @@ func updateTag(field *reflect.StructField, superTag string) (ret string) {
 
 	if superTag != "" {
 		ret = superTag + TagSeparator + ret
+	} else {
+		if Prefix != "" {
+			ret = Prefix + TagSeparator + ret
+		}
 	}
 	return
 }

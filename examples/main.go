@@ -23,6 +23,7 @@ func main() {
 	fmt.Println("init")
 	config := configTest{}
 
+	goConfig.PrefixEnv = "EXAMPLE"
 	err := goConfig.Parse(&config)
 	if err != nil {
 		fmt.Println(err)

@@ -11,6 +11,9 @@ import (
 	"github.com/crgimenes/goConfig/structTag"
 )
 
+// Prefix is a string that would be placed at the beginning of the generated tags.
+var Prefix string
+
 // Usage is the function that is called when an error occurs.
 var Usage func()
 
@@ -19,6 +22,7 @@ func Setup(tag string, tagDefault string) {
 	Usage = DefaultUsage
 
 	structTag.Setup()
+	structTag.Prefix = Prefix
 	SetTag(tag)
 	SetTagDefault(tagDefault)
 
