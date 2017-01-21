@@ -13,7 +13,7 @@ import (
 // Tag to set main name of field
 var Tag = "cfg"
 
-// Tag to set default value
+// TagDefault to set default value
 var TagDefault = "cfgDefault"
 
 // Path sets default config path
@@ -25,8 +25,10 @@ var File string
 // FileRequired config file required
 var FileRequired bool
 
+// HelpString temporarily saves help
 var HelpString string
 
+//Usage is a function to show the help, can be replaced by your own version.
 var Usage func()
 
 func init() {
