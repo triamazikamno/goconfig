@@ -52,7 +52,10 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
-	prepareHelp(config)
+	err = prepareHelp(config)
+	if err != nil {
+		return
+	}
 
 	goFlags.Setup(Tag, TagDefault)
 	goFlags.Usage = Usage
@@ -127,11 +130,13 @@ func prepareHelp(config interface{}) (err error) {
 	return
 }
 
+// PrintDefaults print the default help
 func PrintDefaults() {
 	fmt.Printf("Config file %q:\n", Path+File)
 	fmt.Println(HelpString)
 }
 
+// DefaultUsage is assigned for Usage function by default
 func DefaultUsage() {
 	fmt.Println("Usage")
 	goFlags.PrintDefaults()
