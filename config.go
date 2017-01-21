@@ -88,7 +88,10 @@ func LoadJSON(config interface{}) (err error) {
 func Save(config interface{}) (err error) {
 	_, err = os.Stat(Path)
 	if os.IsNotExist(err) {
-		os.Mkdir(Path, 0700)
+		err = os.Mkdir(Path, os.ModePerm)
+		if err != nil {
+			return
+		}
 	} else if err != nil {
 		return
 	}
