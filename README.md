@@ -1,4 +1,5 @@
 # goConfig
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b8c6bf828cfa451d907321aded911509)](https://www.codacy.com/app/crgimenes/goConfig?utm_source=github.com&utm_medium=referral&utm_content=crgimenes/goConfig&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/crgimenes/goConfig.svg?branch=master)](https://travis-ci.org/crgimenes/goConfig)
 [![Go Report Card](https://goreportcard.com/badge/github.com/crgimenes/goConfig)](https://goreportcard.com/report/github.com/crgimenes/goConfig)
 [![codecov](https://codecov.io/gh/crgimenes/goConfig/branch/master/graph/badge.svg)](https://codecov.io/gh/crgimenes/goConfig)
