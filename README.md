@@ -4,6 +4,8 @@
 [![codecov](https://codecov.io/gh/crgimenes/goConfig/branch/master/graph/badge.svg)](https://codecov.io/gh/crgimenes/goConfig)
 [![GoDoc](https://godoc.org/github.com/crgimenes/goConfig?status.png)](https://godoc.org/github.com/crgimenes/goConfig)
 [![Go project version](https://badge.fury.io/go/github.com%2Fcrgimenes%2FgoConfig.svg)](https://badge.fury.io/go/github.com%2Fcrgimenes%2FgoConfig)
+[![MIT Licensed](https://img.shields.io/badge/license-MIT-green.svg)](https://tldrlegal.com/license/mit-license)
+
 
 goConfig uses a struct as input and populates the fields of this struct with parameters fom command line, environment variables and configuration file.
 
