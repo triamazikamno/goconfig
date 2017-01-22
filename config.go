@@ -1,7 +1,6 @@
 package goConfig
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"path"
@@ -42,8 +41,9 @@ var Usage func()
 
 // Fileformat struct holds the functions to Load and Save the file containing the settings
 type Fileformat struct {
-	Save func(config interface{}) (err error)
-	Load func(config interface{}) (err error)
+	Save        func(config interface{}) (err error)
+	Load        func(config interface{}) (err error)
+	PrepareHelp func(config interface{}) (help string, err error)
 }
 
 // Formats is the list of registered formats.
@@ -67,6 +67,10 @@ func Parse(config interface{}) (err error) {
 			if err != nil {
 				return
 			}
+			HelpString, err = format.PrepareHelp(config)
+			if err != nil {
+				return
+			}
 		} else {
 			err = ErrFileFormatNotDefined
 			return
@@ -80,11 +84,6 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
-	err = prepareHelp(config)
-	if err != nil {
-		return
-	}
-
 	goFlags.Prefix = PrefixFlag
 	goFlags.Setup(Tag, TagDefault)
 	goFlags.Usage = Usage
@@ -94,16 +93,6 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
-	return
-}
-
-func prepareHelp(config interface{}) (err error) {
-	var helpAux []byte
-	helpAux, err = json.MarshalIndent(config, "", "    ")
-	if err != nil {
-		return
-	}
-	HelpString = string(helpAux)
 	return
 }
 

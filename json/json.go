@@ -59,3 +59,14 @@ func SaveJSON(config interface{}) (err error) {
 	}
 	return
 }
+
+// PrepareHelp return help string for this file format.
+func PrepareHelp(config interface{}) (help string, err error) {
+	var helpAux []byte
+	helpAux, err = json.MarshalIndent(config, "", "    ")
+	if err != nil {
+		return
+	}
+	help = string(helpAux)
+	return
+}
