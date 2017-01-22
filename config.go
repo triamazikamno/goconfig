@@ -2,9 +2,9 @@ package goConfig
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"io/ioutil"
-	"os"
+	"path"
 
 	"github.com/crgimenes/goConfig/goEnv"
 	"github.com/crgimenes/goConfig/goFlags"
@@ -34,10 +34,23 @@ var PrefixFlag string
 // PrefixEnv is a string that would be placed at the beginning of the generated Event tags.
 var PrefixEnv string
 
+// ErrFileFormatNotDefined Is the error that is returned when there is no defined configuration file format.
+var ErrFileFormatNotDefined = errors.New("File format not defined.")
+
 //Usage is a function to show the help, can be replaced by your own version.
 var Usage func()
 
+// Fileformat struct holds the functions to Load and Save the file containing the settings
+type Fileformat struct {
+	Save func(config interface{}) (err error)
+	Load func(config interface{}) (err error)
+}
+
+// Formats is the list of registered formats.
+var formats map[string]Fileformat
+
 func init() {
+	formats = make(map[string]Fileformat)
 	Usage = DefaultUsage
 	Path = "./"
 	File = "config.json"
@@ -47,9 +60,17 @@ func init() {
 // Parse configuration
 func Parse(config interface{}) (err error) {
 
-	err = LoadJSON(config)
-	if err != nil {
-		return
+	ext := path.Ext(File)
+	if ext != "" {
+		if format, ok := formats[ext]; ok {
+			err = format.Load(config)
+			if err != nil {
+				return
+			}
+		} else {
+			err = ErrFileFormatNotDefined
+			return
+		}
 	}
 
 	goEnv.Prefix = PrefixEnv
@@ -73,58 +94,6 @@ func Parse(config interface{}) (err error) {
 		return
 	}
 
-	return
-}
-
-// LoadJSON config file
-func LoadJSON(config interface{}) (err error) {
-	configFile := Path + File
-	file, err := os.Open(configFile)
-	if os.IsNotExist(err) && !FileRequired {
-		err = nil
-		return
-	} else if err != nil {
-		return
-	}
-	defer file.Close()
-
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&config)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-// Save config file
-func Save(config interface{}) (err error) {
-	_, err = os.Stat(Path)
-	if os.IsNotExist(err) {
-		err = os.Mkdir(Path, os.ModePerm)
-		if err != nil {
-			return
-		}
-	} else if err != nil {
-		return
-	}
-
-	configFile := Path + File
-
-	_, err = os.Stat(configFile)
-	if err != nil {
-		return
-	}
-
-	b, err := json.MarshalIndent(config, "", "\t")
-	if err != nil {
-		return
-	}
-
-	err = ioutil.WriteFile(configFile, b, 0644)
-	if err != nil {
-		return
-	}
 	return
 }
 
