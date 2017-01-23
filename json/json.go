@@ -8,6 +8,16 @@ import (
 	"github.com/crgimenes/goConfig"
 )
 
+func init() {
+	f := goConfig.Fileformat{
+		Extension:   ".json",
+		Save:        SaveJSON,
+		Load:        LoadJSON,
+		PrepareHelp: PrepareHelp,
+	}
+	goConfig.Formats = append(goConfig.Formats, f)
+}
+
 // LoadJSON config file
 func LoadJSON(config interface{}) (err error) {
 	configFile := goConfig.Path + goConfig.File

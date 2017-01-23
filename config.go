@@ -41,38 +41,49 @@ var Usage func()
 
 // Fileformat struct holds the functions to Load and Save the file containing the settings
 type Fileformat struct {
+	Extension   string
 	Save        func(config interface{}) (err error)
 	Load        func(config interface{}) (err error)
 	PrepareHelp func(config interface{}) (help string, err error)
 }
 
 // Formats is the list of registered formats.
-var formats map[string]Fileformat
+var Formats []Fileformat
+
+func findFileFormat(extension string) (format Fileformat, err error) {
+	format = Fileformat{}
+	for _, f := range Formats {
+		if f.Extension == extension {
+			format = f
+			return
+		}
+	}
+	err = ErrFileFormatNotDefined
+	return
+}
 
 func init() {
-	formats = make(map[string]Fileformat)
 	Usage = DefaultUsage
 	Path = "./"
-	File = "config.json"
+	File = ""
 	FileRequired = false
 }
 
 // Parse configuration
 func Parse(config interface{}) (err error) {
-
 	ext := path.Ext(File)
 	if ext != "" {
-		if format, ok := formats[ext]; ok {
-			err = format.Load(config)
-			if err != nil {
-				return
-			}
-			HelpString, err = format.PrepareHelp(config)
-			if err != nil {
-				return
-			}
-		} else {
-			err = ErrFileFormatNotDefined
+		var format Fileformat
+		format, err = findFileFormat(ext)
+		if err != nil {
+			return
+		}
+		err = format.Load(config)
+		if err != nil {
+			return
+		}
+		HelpString, err = format.PrepareHelp(config)
+		if err != nil {
 			return
 		}
 	}
