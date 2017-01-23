@@ -58,16 +58,23 @@ func mPrepareHelp(config interface{}) (help string, err error) {
 
 func TestParse(t *testing.T) {
 
+	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
+	File = "config.txt"
+
 	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
+
+	err := Parse(s)
+	if err != ErrFileFormatNotDefined {
+		t.Fatal("Error ErrFileFormatNotDefined expected")
+	}
+
 	File = "config.json"
 
 	os.Setenv("A", "900")
 	os.Setenv("B", "TEST")
 
-	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
-
 	Tag = ""
-	err := Parse(s)
+	err = Parse(s)
 	if err != structTag.ErrUndefinedTag {
 		t.Fatal("Error structTag.ErrUndefinedTag expected")
 	}
