@@ -34,8 +34,6 @@ type configTest struct {
 }
 
 func main() {
-	fmt.Println("init")
-
 	config := configTest{}
 	err := goConfig.Parse(&config)
 	if err != nil {
@@ -44,8 +42,6 @@ func main() {
 	}
 
 	fmt.Printf("\n\n%#v\n\n", config)
-
-	fmt.Println("end")
 }
 ```
 

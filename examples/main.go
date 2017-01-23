@@ -21,7 +21,6 @@ type configTest struct {
 }
 
 func main() {
-	fmt.Println("init")
 	config := configTest{}
 
 	goConfig.File = "config.json"
@@ -34,5 +33,4 @@ func main() {
 
 	fmt.Printf("\n\n%#v\n\n", config)
 
-	fmt.Println("end")
 }
