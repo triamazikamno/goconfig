@@ -1,6 +1,7 @@
 package goConfig
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -55,6 +56,22 @@ func mPrepareHelp(config interface{}) (help string, err error) {
 }
 
 // -=-=-=-=-=-=-=-=-
+func eLoad(config interface{}) (err error) {
+	err = errors.New("test")
+	return
+}
+
+func eSave(config interface{}) (err error) {
+	err = errors.New("test")
+	return
+}
+
+func ePrepareHelp(config interface{}) (help string, err error) {
+	err = errors.New("test")
+	return
+}
+
+// -=-=-=-=-=-=-=-=-
 
 func TestParse(t *testing.T) {
 
@@ -69,6 +86,22 @@ func TestParse(t *testing.T) {
 	}
 
 	File = "config.json"
+
+	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: eLoad, PrepareHelp: mPrepareHelp}}
+
+	err = Parse(s)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
+
+	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: ePrepareHelp}}
+
+	err = Parse(s)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
+
+	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
 
 	os.Setenv("A", "900")
 	os.Setenv("B", "TEST")
