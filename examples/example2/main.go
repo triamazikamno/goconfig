@@ -1,3 +1,6 @@
+/*
+Example with configuration file.
+*/
 package main
 
 import "fmt"
