@@ -2,7 +2,6 @@ package goConfig
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"testing"
 
@@ -103,8 +102,14 @@ func TestParse(t *testing.T) {
 
 	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
 
-	os.Setenv("A", "900")
-	os.Setenv("B", "TEST")
+	err = os.Setenv("A", "900")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = os.Setenv("B", "TEST")
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	Tag = ""
 	err = Parse(s)
@@ -118,8 +123,6 @@ func TestParse(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
-
 	os.Setenv("A", "900ERROR")
 
 	goFlags.Reset()
@@ -128,7 +131,10 @@ func TestParse(t *testing.T) {
 		t.Fatal("Error expected")
 	}
 
-	os.Setenv("A", "")
+	err = os.Setenv("A", "")
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	goFlags.Reset()
 	err = Parse(s)
@@ -148,5 +154,22 @@ func TestParse(t *testing.T) {
 	if err == nil {
 		t.Fatal("Error expected")
 	}
+}
+
+func ExampleParse() {
+
+	type config struct {
+		Name  string `cfg:"Name" cfgDefault:"root"`
+		Value int    `cfg:"Value" cfgDefault:"123"`
+	}
+
+	cfg := config{}
+
+	err := Parse(&cfg)
+	if err != nil {
+		println(err)
+	}
+
+	println("Name:", cfg.Name, "Value:", cfg.Value)
 
 }
