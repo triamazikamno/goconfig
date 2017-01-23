@@ -54,20 +54,16 @@ func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, d
 
 	// create PrintDefaults output
 	tag = strings.ToUpper(tag)
+	sysvar := `$` + tag
 	if runtime.GOOS == "windows" {
-		if defaultValue == "" {
-			PrintDefaultsOutput += `  %` + tag + `% ` + datatype + "\n\n"
-		} else {
-			printDV := " (default \"" + defaultValue + "\")"
-			PrintDefaultsOutput += `  %` + tag + `% ` + datatype + "\n\t" + printDV + "\n"
-		}
+		sysvar = `%` + tag + `%`
+	}
+
+	if defaultValue == "" {
+		PrintDefaultsOutput += ` ` + sysvar + ` ` + datatype + "\n\n"
 	} else {
-		if defaultValue == "" {
-			PrintDefaultsOutput += "  $" + tag + " " + datatype + "\n\n"
-		} else {
-			printDV := " (default \"" + defaultValue + "\")"
-			PrintDefaultsOutput += "  $" + tag + " " + datatype + "\n\t" + printDV + "\n"
-		}
+		printDV := " (default \"" + defaultValue + "\")"
+		PrintDefaultsOutput += `  ` + sysvar + `%` + datatype + "\n\t" + printDV + "\n"
 	}
 
 	// get value from environment variable

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/crgimenes/goConfig/goFlags"
+	"github.com/crgimenes/goConfig/structTag"
 )
 
 type testStruct struct {
@@ -65,7 +66,14 @@ func TestParse(t *testing.T) {
 
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
 
+	Tag = ""
 	err := Parse(s)
+	if err != structTag.ErrUndefinedTag {
+		t.Fatal("Error structTag.ErrUndefinedTag expected")
+	}
+
+	Tag = "cfg"
+	err = Parse(s)
 	if err != nil {
 		t.Fatal(err)
 	}

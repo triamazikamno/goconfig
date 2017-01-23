@@ -61,6 +61,9 @@ func TestParse(t *testing.T) {
 	Setup()
 
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
+
+	Prefix = "TEST"
+
 	err := Parse(s, "")
 	if err != ErrUndefinedTag {
 		t.Fatal("ErrUndefinedTag error expected")
@@ -109,4 +112,11 @@ func TestParse(t *testing.T) {
 	if err != ErrNotAStruct {
 		t.Fatal("ErrNotAStruct error expected")
 	}
+
+	Reset()
+	err = Parse(&s1, "")
+	if err != ErrNotAStruct {
+		t.Fatal("ErrNotAStruct error expected")
+	}
+
 }
