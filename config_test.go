@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"testing"
+
+	"github.com/crgimenes/goConfig/goFlags"
 )
 
 type testStruct struct {
@@ -25,7 +27,38 @@ type testSubSub struct {
 	B string `cfg:"S" cfgDefault:"600"`
 }
 
+func TestFindFileFormat(t *testing.T) {
+	_, err := findFileFormat(".json")
+	if err != ErrFileFormatNotDefined {
+		t.Fatal(err)
+	}
+	Formats = []Fileformat{Fileformat{Extension: ".json"}}
+	_, err = findFileFormat(".json")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+// -=-=-=-=-=-=-=-=-=
+
+func mLoad(config interface{}) (err error) {
+	return
+}
+
+func mSave(config interface{}) (err error) {
+	return
+}
+
+func mPrepareHelp(config interface{}) (help string, err error) {
+	return
+}
+
+// -=-=-=-=-=-=-=-=-
+
 func TestParse(t *testing.T) {
+
+	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
+	File = "config.json"
 
 	os.Setenv("A", "900")
 	os.Setenv("B", "TEST")
@@ -39,34 +72,33 @@ func TestParse(t *testing.T) {
 
 	fmt.Printf("\n\nTestParseTags: %#v\n\n", s)
 
-	/*
-		os.Setenv("A", "900ERROR")
+	os.Setenv("A", "900ERROR")
 
-		goFlags.Reset()
-		err = Parse(s)
-		if err == nil {
-			t.Fatal("Error expected")
-		}
+	goFlags.Reset()
+	err = Parse(s)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
 
-		os.Setenv("A", "")
+	os.Setenv("A", "")
 
-		goFlags.Reset()
-		err = Parse(s)
-		if err != nil {
-			t.Fatal(err)
-		}
+	goFlags.Reset()
+	err = Parse(s)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-		s1 := "test"
-		goFlags.Reset()
-		err = Parse(s1)
-		if err == nil {
-			t.Fatal("Error expected")
-		}
+	s1 := "test"
+	goFlags.Reset()
+	err = Parse(s1)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
 
-		goFlags.Reset()
-		err = Parse(&s1)
-		if err == nil {
-			t.Fatal("Error expected")
-		}
-	*/
+	goFlags.Reset()
+	err = Parse(&s1)
+	if err == nil {
+		t.Fatal("Error expected")
+	}
+
 }
