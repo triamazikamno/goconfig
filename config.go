@@ -109,8 +109,10 @@ func Parse(config interface{}) (err error) {
 
 // PrintDefaults print the default help
 func PrintDefaults() {
-	fmt.Printf("Config file %q:\n", Path+File)
-	fmt.Println(HelpString)
+	if File != "" {
+		fmt.Printf("Config file %q:\n", Path+File)
+		fmt.Println(HelpString)
+	}
 }
 
 // DefaultUsage is assigned for Usage function by default
