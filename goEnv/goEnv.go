@@ -28,6 +28,7 @@ func Setup(tag string, tagDefault string) {
 
 	structTag.ParseMap[reflect.Int] = reflectInt
 	structTag.ParseMap[reflect.String] = reflectString
+	structTag.ParseMap[reflect.Bool] = reflectBool
 }
 
 // SetTag set a new tag
@@ -106,12 +107,27 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 	return
 }
 
+func reflectBool(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	newValue := getNewValue(field, value, tag, "bool")
+	if newValue == "" {
+		return
+	}
+
+	var newBoolValue bool
+	newBoolValue = newValue == "true" || newValue == "t"
+
+	value.SetBool(newBoolValue)
+
+	return
+}
+
+// PrintDefaults print the default help
 func PrintDefaults() {
 	fmt.Println("Environment variables:")
 	fmt.Println(PrintDefaultsOutput)
-
 }
 
+// DefaultUsage is assigned for Usage function by default
 func DefaultUsage() {
 	fmt.Println("Usage")
 	PrintDefaults()
