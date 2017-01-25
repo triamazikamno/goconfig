@@ -43,6 +43,7 @@ func Setup(tag string, tagDefault string) {
 
 	structTag.ParseMap[reflect.Int] = reflectInt
 	structTag.ParseMap[reflect.String] = reflectString
+	structTag.ParseMap[reflect.Bool] = reflectBool
 }
 
 // SetTag set a new tag
@@ -148,11 +149,33 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 	return
 }
 
+func reflectBool(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+
+	var aux bool
+	var defaltValue bool
+	defaltTag := field.Tag.Get(structTag.TagDefault)
+	defaltValue = defaltTag == "true" || defaltTag == "t"
+
+	meta := parameterMeta{}
+	meta.Value = &aux
+	meta.Tag = strings.ToLower(tag)
+	meta.Kind = reflect.String
+	parametersMetaMap[value] = meta
+
+	flag.BoolVar(&aux, meta.Tag, defaltValue, "")
+
+	//fmt.Println(tag, defaltValue)
+
+	return
+}
+
+// PrintDefaults print the default help
 func PrintDefaults() {
 	flag.PrintDefaults()
 
 }
 
+// DefaultUsage is assigned for Usage function by default
 func DefaultUsage() {
 	fmt.Println("Usage")
 	PrintDefaults()
