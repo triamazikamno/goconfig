@@ -81,6 +81,10 @@ func Parse(config interface{}) (err error) {
 			value := *v.Value.(*int)
 			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
 			k.SetInt(int64(value))
+		case reflect.Bool:
+			value := *v.Value.(*bool)
+			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
+			k.SetBool(value)
 
 		}
 	}
@@ -159,7 +163,7 @@ func reflectBool(field *reflect.StructField, value *reflect.Value, tag string) (
 	meta := parameterMeta{}
 	meta.Value = &aux
 	meta.Tag = strings.ToLower(tag)
-	meta.Kind = reflect.String
+	meta.Kind = reflect.Bool
 	parametersMetaMap[value] = meta
 
 	flag.BoolVar(&aux, meta.Tag, defaltValue, "")
