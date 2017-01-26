@@ -64,7 +64,7 @@ func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, d
 		PrintDefaultsOutput += ` ` + sysvar + ` ` + datatype + "\n\n"
 	} else {
 		printDV := " (default \"" + defaultValue + "\")"
-		PrintDefaultsOutput += `  ` + sysvar + `%` + datatype + "\n\t" + printDV + "\n"
+		PrintDefaultsOutput += `  ` + sysvar + ` ` + datatype + "\n\t" + printDV + "\n"
 	}
 
 	// get value from environment variable
