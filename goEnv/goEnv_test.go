@@ -9,6 +9,7 @@ type testStruct struct {
 	A int    `cfg:"A" cfgDefault:"100"`
 	B string `cfg:"B" cfgDefault:"200"`
 	C string
+	D bool   `cfg:"D" cfgDefault:"true"`
 	N string `cfg:"-"`
 	M int
 	p string
@@ -32,6 +33,7 @@ func TestParse(t *testing.T) {
 
 	os.Setenv("A", "900")
 	os.Setenv("B", "TEST")
+	os.Setenv("D", "true")
 
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
 	err := Parse(s)
@@ -45,6 +47,10 @@ func TestParse(t *testing.T) {
 
 	if s.B != "TEST" {
 		t.Fatal("s.B != \"TEST\", s.B:", s.B)
+	}
+
+	if !s.D {
+		t.Fatal("s.D == true, s.D:", s.D)
 	}
 
 	if s.S.S.B != "600" {
