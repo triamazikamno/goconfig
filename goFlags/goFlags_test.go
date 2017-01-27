@@ -9,6 +9,7 @@ type testStruct struct {
 	A int    `flag:"A" flagDefault:"100"`
 	B string `flag:"B" flagDefault:"200"`
 	C string
+	D bool   `cfg:"D" cfgDefault:"true"`
 	N string `flag:"-"`
 	M int
 	p string
@@ -37,6 +38,7 @@ func TestParse(t *testing.T) {
 		"program",
 		"-a=900",
 		"-b=TEST",
+		"-d=true",
 		"-s_s_a=99999",
 	}
 
@@ -54,6 +56,10 @@ func TestParse(t *testing.T) {
 
 	if s.B != "TEST" {
 		t.Fatal("s.B != \"TEST\", s.B:", s.B)
+	}
+
+	if !s.D {
+		t.Fatal("s.D == true, s.D:", s.D)
 	}
 
 	if s.S.S.A != 99999 {
