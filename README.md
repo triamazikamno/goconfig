@@ -45,6 +45,9 @@ func main() {
 }
 ```
 
+With the example above try environment variables like $DOMAIN or $MONGODB_HOST. 
+You can also try using parameters on the command line, try -h to see the help.
+
 ## Contributing
 
 - Fork the repo on GitHub
