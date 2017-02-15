@@ -4,6 +4,7 @@ Example without configuration file. Only parameters and environment variables.
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/crgimenes/goConfig"
@@ -35,6 +36,8 @@ func main() {
 		return
 	}
 
-	fmt.Printf("\n\n%#v\n\n", config)
+	// just print struct on screen
+	j, _ := json.MarshalIndent(config, "", "\t")
+	fmt.Println(string(j))
 
 }

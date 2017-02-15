@@ -3,9 +3,13 @@ Example with configuration file.
 */
 package main
 
-import "fmt"
-import "github.com/crgimenes/goConfig"
-import _ "github.com/crgimenes/goConfig/json"
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/crgimenes/goConfig"
+	_ "github.com/crgimenes/goConfig/json"
+)
 
 type mongoDB struct {
 	Host string `cfgDefault:"example.com"`
@@ -34,6 +38,7 @@ func main() {
 		return
 	}
 
-	fmt.Printf("\n\n%#v\n\n", config)
-
+	// just print struct on screen
+	j, _ := json.MarshalIndent(config, "", "\t")
+	fmt.Println(string(j))
 }
