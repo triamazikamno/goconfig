@@ -45,7 +45,8 @@ func main() {
 }
 ```
 
-With the example above try environment variables like $DOMAIN or $MONGODB_HOST. 
+With the example above try environment variables like *$DOMAIN* or *$MONGODB_HOST* and run the example again to see what happens.
+
 You can also try using parameters on the command line, try -h to see the help.
 
 ## Contributing
