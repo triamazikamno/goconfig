@@ -34,7 +34,7 @@ var PrefixFlag string
 var PrefixEnv string
 
 // ErrFileFormatNotDefined Is the error that is returned when there is no defined configuration file format.
-var ErrFileFormatNotDefined = errors.New("File format not defined.")
+var ErrFileFormatNotDefined = errors.New("file format not defined")
 
 //Usage is a function to show the help, can be replaced by your own version.
 var Usage func()
