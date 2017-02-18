@@ -33,7 +33,7 @@ func TestFindFileFormat(t *testing.T) {
 	if err != ErrFileFormatNotDefined {
 		t.Fatal(err)
 	}
-	Formats = []Fileformat{Fileformat{Extension: ".json"}}
+	Formats = []Fileformat{{Extension: ".json"}}
 	_, err = findFileFormat(".json")
 	if err != nil {
 		t.Fatal(err)
@@ -77,7 +77,7 @@ func TestParse(t *testing.T) {
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
 	File = "config.txt"
 
-	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
+	Formats = []Fileformat{{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
 
 	err := Parse(s)
 	if err != ErrFileFormatNotDefined {
@@ -86,21 +86,21 @@ func TestParse(t *testing.T) {
 
 	File = "config.json"
 
-	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: eLoad, PrepareHelp: mPrepareHelp}}
+	Formats = []Fileformat{{Extension: ".json", Save: mSave, Load: eLoad, PrepareHelp: mPrepareHelp}}
 
 	err = Parse(s)
 	if err == nil {
 		t.Fatal("Error expected")
 	}
 
-	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: ePrepareHelp}}
+	Formats = []Fileformat{{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: ePrepareHelp}}
 
 	err = Parse(s)
 	if err == nil {
 		t.Fatal("Error expected")
 	}
 
-	Formats = []Fileformat{Fileformat{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
+	Formats = []Fileformat{{Extension: ".json", Save: mSave, Load: mLoad, PrepareHelp: mPrepareHelp}}
 
 	err = os.Setenv("A", "900")
 	if err != nil {
