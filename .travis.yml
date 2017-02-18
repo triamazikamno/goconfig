@@ -1,15 +1,18 @@
 language: go
-
-os: 
-    - linux
+sudo: false
 
 go:
-    - 1.6.x
-    - 1.7.x
-    - 1.8rc1
+    - 1.7
+    - 1.8
+    - master
 
 script:
     - sh test.sh
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
+    
+matrix:
+    allow_failures:
+      - go: 'master'
+    fast_finish: true
