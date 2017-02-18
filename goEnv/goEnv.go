@@ -47,6 +47,7 @@ func Parse(config interface{}) (err error) {
 	return
 }
 
+// PrintDefaultsOutput changes the default output help string
 var PrintDefaultsOutput string
 
 func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, datatype string) (ret string) {
