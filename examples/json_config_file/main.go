@@ -5,40 +5,39 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/crgimenes/goConfig"
 	_ "github.com/crgimenes/goConfig/json"
 )
 
 type mongoDB struct {
-	Host string `cfgDefault:"example.com"`
-	Port int    `cfgDefault:"999"`
+	Host string `json:"host" cfg:"host" cfgDefault:"example.com"`
+	Port int    `json:"port" cfg:"port" cfgDefault:"999"`
 }
 
 type systemUser struct {
-	Name     string `cfg:"name"`
-	Password string `cfg:"passwd"`
+	Name     string `json:"name" cfg:"name"`
+	Password string `json:"passwd" cfg:"passwd"`
 }
 
 type configTest struct {
-	Domain  string
-	User    systemUser `cfg:"user"`
-	MongoDB mongoDB
+	DebugMode bool `json:"debug" cfg:"debug" cfgDefault:"false"`
+	Domain    string
+	User      systemUser `json:"user" cfg:"user"`
+	MongoDB   mongoDB    `json:"mongodb" cfg:"mongodb"`
 }
 
 func main() {
 	config := configTest{}
 
 	goConfig.File = "config.json"
-	goConfig.PrefixEnv = "EXAMPLE"
 	err := goConfig.Parse(&config)
 	if err != nil {
-		fmt.Println(err)
+		println(err)
 		return
 	}
 
 	// just print struct on screen
 	j, _ := json.MarshalIndent(config, "", "\t")
-	fmt.Println(string(j))
+	println(string(j))
 }

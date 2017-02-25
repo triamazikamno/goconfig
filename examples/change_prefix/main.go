@@ -14,14 +14,14 @@ type mongoDB struct {
 }
 
 type systemUser struct {
-	Name     string `cfg:"name"`
+	Name     string `json:"name" cfg:"name"`
 	Password string `json:"passwd" cfg:"passwd"`
 }
 
 type configTest struct {
-	Domain  string
-	User    systemUser `cfg:"user"`
-	MongoDB mongoDB
+	Domain    string
+	User      systemUser `json:"user" cfg:"user"`
+	MongoDB   mongoDB    `json:"mongo" cfg:"mongo"`
 }
 
 func main() {

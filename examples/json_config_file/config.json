@@ -1,7 +1,13 @@
 {
-  "domain": "www.example.com",
-  "mongodb": {
-    "host": "localhost",
-    "port": 33
-  }
+	"debug": true,
+	"Domain": "example.com",
+	"user": {
+		"name": "",
+		"passwd": ""
+	},
+	"mongodb": {
+		"host": "myhost",
+		"port": 9090
+	}
 }
+
