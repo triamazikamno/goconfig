@@ -74,6 +74,23 @@ func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, d
 		return
 	}
 
+	if datatype == "bool" {
+		if value.Bool() {
+			ret = "true"
+			return
+		}
+	} else if datatype == "string" {
+		ret = value.String()
+		if ret != "" {
+			return
+		}
+	} else if datatype == "int" {
+		ret = strconv.FormatInt(value.Int(), 10)
+		if ret != "0" {
+			return
+		}
+	}
+
 	// get value from default settings
 	ret = defaultValue
 

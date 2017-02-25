@@ -78,7 +78,7 @@ func Parse(config interface{}) (err error) {
 		if err != nil {
 			return
 		}
-		err = format.Load(config)
+		err = format.Load(&config)
 		if err != nil {
 			return
 		}
