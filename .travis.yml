@@ -5,12 +5,6 @@ go:
     - 1.7
     - 1.8
     - master
-
-script:
-    - sh test.sh
-
-after_success:
-    - bash <(curl -s https://codecov.io/bash)
     
 matrix:
     allow_failures:
