@@ -20,11 +20,10 @@ go get github.com/crgimenes/goConfig
 ```go
 package main
 
-import "fmt"
 import "github.com/crgimenes/goConfig"
 
 /*
-step 1: Declare your configuration struct, 
+step 1: Declare your configuration struct,
 it may or may not contain substructures.
 */
 
@@ -34,19 +33,20 @@ type mongoDB struct {
 }
 
 type configTest struct {
-	Domain  string
-	MongoDB mongoDB
+	Domain    string
+	DebugMode bool `json:"db" cfg:"db" cfgDefault:"false"`
+	MongoDB   mongoDB
 }
 
 func main() {
 
 	// step 2: Instantiate your structure.
-	config := configTest{} 
-	
+	config := configTest{}
+
 	// step 3: Pass the instance pointer to the parser
-	err := goConfig.Parse(&config) 
+	err := goConfig.Parse(&config)
 	if err != nil {
-		fmt.Println(err)
+		println(err)
 		return
 	}
 
