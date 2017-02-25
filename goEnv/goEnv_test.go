@@ -64,7 +64,7 @@ func TestParse(t *testing.T) {
 		t.Fatal("Error expected")
 	}
 
-	os.Setenv("A", "")
+	os.Setenv("A", "100")
 
 	err = Parse(s)
 	if err != nil {
