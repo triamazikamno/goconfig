@@ -23,6 +23,11 @@ package main
 import "fmt"
 import "github.com/crgimenes/goConfig"
 
+/*
+step 1: Declare your configuration struct, 
+it may or may not contain substructures.
+*/
+
 type mongoDB struct {
 	Host string `cfgDefault:"example.com"`
 	Port int    `cfgDefault:"999"`
@@ -34,14 +39,27 @@ type configTest struct {
 }
 
 func main() {
-	config := configTest{}
-	err := goConfig.Parse(&config)
+
+	// step 2: Instantiate your structure.
+	config := configTest{} 
+	
+	// step 3: Pass the instance pointer to the parser
+	err := goConfig.Parse(&config) 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Printf("\n\n%#v\n\n", config)
+	/*
+	   The parser populated your struct with the data
+	   it took from environment variables and command
+	   line and now you can use it.
+	*/
+
+	println("config.Domain......:", config.Domain)
+	println("config.DebugMode...:", config.DebugMode)
+	println("config.MongoDB.Host:", config.MongoDB.Host)
+	println("config.MongoDB.Port:", config.MongoDB.Port)
 }
 ```
 
