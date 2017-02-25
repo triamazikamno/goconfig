@@ -1,33 +1,8 @@
+# Using a prefix in the environment variables
 
-```bash
-go run main.go -h
+Usually your program is not running alone, it works along with other parts of the system and it is much better to have a prefix in the environment variables so you can differentiate between your programs.
 
-Usage
-  -domain string
-		
-  -mongodb_host string
-		 (default "example.com")
-  -mongodb_port int
-		 (default 999)
-  -user_name string
-		
-  -user_passwd string
-		
-Environment variables:
- $EXAMPLE_DOMAIN string
-
- $EXAMPLE_USER_NAME string
-
- $EXAMPLE_USER_PASSWD string
-
-  $EXAMPLE_MONGODB_HOST string
-	 (default "example.com")
-  $EXAMPLE_MONGODB_PORT int
-	 (default "999")
-
-exit status 2
-
+To do this just add the following line before calling the parser
+```go
+goConfig.PrefixEnv = "EXAMPLE"
 ```
-
-
-

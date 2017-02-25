@@ -1,14 +1,12 @@
-/*
-Example without configuration file. Only parameters and environment variables.
-*/
 package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/crgimenes/goConfig"
 )
+
+// Declare config struct
 
 type mongoDB struct {
 	Host string `cfgDefault:"example.com"`
@@ -17,7 +15,7 @@ type mongoDB struct {
 
 type systemUser struct {
 	Name     string `cfg:"name"`
-	Password string `cfg:"passwd"`
+	Password string `json:"passwd" cfg:"passwd"`
 }
 
 type configTest struct {
@@ -27,17 +25,21 @@ type configTest struct {
 }
 
 func main() {
+
+	// Instance config struct
 	config := configTest{}
 
+	// Adds a prefix to the environment variables.
 	goConfig.PrefixEnv = "EXAMPLE"
+
+	// Pass the struct instance pointer to the parser
 	err := goConfig.Parse(&config)
 	if err != nil {
-		fmt.Println(err)
+		println(err)
 		return
 	}
 
-	// just print struct on screen
+	// it just print the config struct on the screen
 	j, _ := json.MarshalIndent(config, "", "\t")
-	fmt.Println(string(j))
-
+	println(string(j))
 }
