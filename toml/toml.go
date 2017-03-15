@@ -21,15 +21,14 @@ func init() {
 // LoadTOML config file
 func LoadTOML(config interface{}) (err error) {
 	configFile := goConfig.Path + goConfig.File
-	file, err := os.Open(configFile)
 	if os.IsNotExist(err) && !goConfig.FileRequired {
 		err = nil
 		return
 	} else if err != nil {
 		return
 	}
-	defer file.Close()
-	_, err = toml.DecodeFile(configFile, &config)
+
+	_, err = toml.DecodeFile(configFile, config)
 	return
 }
 
