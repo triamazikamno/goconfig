@@ -61,8 +61,7 @@ func SaveTOML(config interface{}) (err error) {
 
 // PrepareHelp return help string for this file format.
 func PrepareHelp(config interface{}) (help string, err error) {
-	configFile := goConfig.Path + goConfig.File
-	tmpFile, err := ioutil.TempFile(os.TempDir(), configFile)
+	tmpFile, err := ioutil.TempFile(os.TempDir(), goConfig.File)
 	if err != nil {
 		return
 	}
