@@ -27,6 +27,7 @@ func Setup(tag string, tagDefault string) {
 	SetTagDefault(tagDefault)
 
 	structTag.ParseMap[reflect.Int] = reflectInt
+	structTag.ParseMap[reflect.Float64] = reflectFloat
 	structTag.ParseMap[reflect.String] = reflectString
 	structTag.ParseMap[reflect.Bool] = reflectBool
 }
@@ -89,6 +90,12 @@ func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, d
 		if ret != "0" {
 			return
 		}
+	} else if datatype == "float64" {
+		f := value.Float()
+		ret = strconv.FormatFloat(f, 'f', -1, 64)
+		if ret != "0" {
+			return
+		}
 	}
 
 	// get value from default settings
@@ -110,6 +117,23 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 	}
 
 	value.SetInt(intNewValue)
+
+	return
+}
+
+func reflectFloat(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	newValue := getNewValue(field, value, tag, "float64")
+	if newValue == "" {
+		return
+	}
+
+	var floatNewValue float64
+	floatNewValue, err = strconv.ParseFloat(newValue, 64)
+	if err != nil {
+		return
+	}
+
+	value.SetFloat(floatNewValue)
 
 	return
 }
