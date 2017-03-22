@@ -9,8 +9,10 @@ type testStruct struct {
 	A int    `flag:"A" flagDefault:"100"`
 	B string `flag:"B" flagDefault:"200"`
 	C string
-	D bool   `cfg:"D" cfgDefault:"true"`
-	N string `flag:"-"`
+	D bool `cfg:"D" cfgDefault:"true"`
+	F float64
+	G float64 `cfg:"G" cfgDefault:"3.05"`
+	N string  `flag:"-"`
 	M int
 	p string
 	S testSub `flag:"S"`
@@ -40,6 +42,7 @@ func TestParse(t *testing.T) {
 		"-b=TEST",
 		"-d=true",
 		"-s_s_a=99999",
+		"-f=23.6",
 	}
 
 	s := &testStruct{A: 1, S: testSub{A: 1, B: "2"}}
@@ -60,6 +63,10 @@ func TestParse(t *testing.T) {
 
 	if !s.D {
 		t.Fatal("s.D == true, s.D:", s.D)
+	}
+
+	if s.F != 23.6 {
+		t.Fatal("s.F != 23.6, s.F:", s.F)
 	}
 
 	if s.S.S.A != 99999 {

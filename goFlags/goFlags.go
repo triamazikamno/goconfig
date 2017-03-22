@@ -42,6 +42,7 @@ func Setup(tag string, tagDefault string) {
 	SetTagDefault(tagDefault)
 
 	structTag.ParseMap[reflect.Int] = reflectInt
+	structTag.ParseMap[reflect.Float64] = reflectFloat
 	structTag.ParseMap[reflect.String] = reflectString
 	structTag.ParseMap[reflect.Bool] = reflectBool
 }
@@ -81,6 +82,9 @@ func Parse(config interface{}) (err error) {
 			value := *v.Value.(*int)
 			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
 			k.SetInt(int64(value))
+		case reflect.Float64:
+			value := *v.Value.(*float64)
+			k.SetFloat(float64(value))
 		case reflect.Bool:
 			value := *v.Value.(*bool)
 			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
@@ -130,6 +134,33 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 	flag.IntVar(&aux, meta.Tag, defaltValueInt, "")
 
 	//fmt.Println(tag, defaltValue)
+
+	return
+}
+
+func reflectFloat(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	var aux float64
+	var defaltValue string
+	var defaltValueFloat float64
+
+	defaltValue = field.Tag.Get(structTag.TagDefault)
+
+	if defaltValue == "" || defaltValue == "0" {
+		defaltValueFloat = 0
+	} else {
+		defaltValueFloat, err = strconv.ParseFloat(defaltValue, 64)
+		if err != nil {
+			return
+		}
+	}
+
+	meta := parameterMeta{}
+	meta.Value = &aux
+	meta.Tag = strings.ToLower(tag)
+	meta.Kind = reflect.Float64
+	parametersMetaMap[value] = meta
+
+	flag.Float64Var(&aux, meta.Tag, defaltValueFloat, "")
 
 	return
 }
