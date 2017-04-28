@@ -21,6 +21,7 @@ func init() {
 // LoadTOML config file
 func LoadTOML(config interface{}) (err error) {
 	configFile := goConfig.Path + goConfig.File
+	_, err = os.Stat(configFile)
 	if os.IsNotExist(err) && !goConfig.FileRequired {
 		err = nil
 		return
