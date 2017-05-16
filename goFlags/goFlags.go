@@ -20,6 +20,7 @@ type parameterMeta struct {
 
 var parametersMetaMap map[*reflect.Value]parameterMeta
 var visitedMap map[string]*flag.Flag
+var disableFags bool
 
 // Preserve disable default values and get only visited parameters thus preserving the values passed in the structure, default false
 var Preserve bool
@@ -59,6 +60,10 @@ func SetTagDefault(tag string) {
 
 // Parse configuration
 func Parse(config interface{}) (err error) {
+	if disableFags {
+		return
+	}
+
 	flag.Usage = Usage
 	err = structTag.Parse(config, "")
 	if err != nil {
@@ -93,11 +98,13 @@ func Parse(config interface{}) (err error) {
 		}
 	}
 
+	disableFags = true
 	return
 }
 
 // Reset maps caling setup function
 func Reset() {
+	disableFags = false
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	flag.Usage = nil
 
