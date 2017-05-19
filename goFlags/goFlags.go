@@ -78,23 +78,20 @@ func Parse(config interface{}) (err error) {
 		if _, ok := visitedMap[v.Tag]; !ok && Preserve {
 			continue
 		}
+
 		switch v.Kind {
 		case reflect.String:
 			value := *v.Value.(*string)
-			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
 			k.SetString(value)
 		case reflect.Int:
 			value := *v.Value.(*int)
-			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
 			k.SetInt(int64(value))
 		case reflect.Float64:
 			value := *v.Value.(*float64)
-			k.SetFloat(float64(value))
+			k.SetFloat(value)
 		case reflect.Bool:
 			value := *v.Value.(*bool)
-			//fmt.Printf("Parse %v = \"%v\"\n", v.Tag, value)
 			k.SetBool(value)
-
 		}
 	}
 
