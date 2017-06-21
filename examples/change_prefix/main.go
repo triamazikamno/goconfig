@@ -19,9 +19,9 @@ type systemUser struct {
 }
 
 type configTest struct {
-	Domain    string
-	User      systemUser `json:"user" cfg:"user"`
-	MongoDB   mongoDB    `json:"mongo" cfg:"mongo"`
+	Domain  string
+	User    systemUser `json:"user" cfg:"user"`
+	MongoDB mongoDB    `json:"mongo" cfg:"mongo"`
 }
 
 func main() {
@@ -40,6 +40,10 @@ func main() {
 	}
 
 	// it just print the config struct on the screen
-	j, _ := json.MarshalIndent(config, "", "\t")
+	j, err := json.MarshalIndent(config, "", "\t")
+	if err != nil {
+		println(err)
+		return
+	}
 	println(string(j))
 }
