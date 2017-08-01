@@ -1,6 +1,6 @@
 package main
 
-import "github.com/crgimenes/goConfig"
+import "github.com/crgimenes/goconfig"
 
 /*
 step 1: Declare your configuration struct,
@@ -24,7 +24,7 @@ func main() {
 	config := configTest{}
 
 	// step 3: Pass the instance pointer to the parser
-	err := goConfig.Parse(&config)
+	err := goconfig.Parse(&config)
 	if err != nil {
 		println(err)
 		return

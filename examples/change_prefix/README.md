@@ -4,5 +4,5 @@ Usually your program is not running alone, it works along with other parts of th
 
 To do this just add the following line before calling the parser
 ```go
-goConfig.PrefixEnv = "EXAMPLE"
+goconfig.PrefixEnv = "EXAMPLE"
 ```

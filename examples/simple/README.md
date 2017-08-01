@@ -1,6 +1,6 @@
 # Simple to use
 
-This example shows the simplest way to use goConfig.
+This example shows the simplest way to use goconfig.
 
 Try the following commands:
 

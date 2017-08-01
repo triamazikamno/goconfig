@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/crgimenes/goConfig"
+	"github.com/crgimenes/goconfig"
 )
 
 // Declare config struct
@@ -30,10 +30,10 @@ func main() {
 	config := configTest{}
 
 	// Adds a prefix to the environment variables.
-	goConfig.PrefixEnv = "EXAMPLE"
+	goconfig.PrefixEnv = "EXAMPLE"
 
 	// Pass the struct instance pointer to the parser
-	err := goConfig.Parse(&config)
+	err := goconfig.Parse(&config)
 	if err != nil {
 		println(err)
 		return

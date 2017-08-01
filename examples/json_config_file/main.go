@@ -6,8 +6,8 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/crgimenes/goConfig"
-	_ "github.com/crgimenes/goConfig/json"
+	"github.com/crgimenes/goconfig"
+	_ "github.com/crgimenes/goconfig/json"
 )
 
 type mongoDB struct {
@@ -30,8 +30,8 @@ type configTest struct {
 func main() {
 	config := configTest{}
 
-	goConfig.File = "config.json"
-	err := goConfig.Parse(&config)
+	goconfig.File = "config.json"
+	err := goconfig.Parse(&config)
 	if err != nil {
 		println(err)
 		return

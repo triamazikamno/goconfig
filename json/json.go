@@ -5,24 +5,24 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/crgimenes/goConfig"
+	"github.com/crgimenes/goconfig"
 )
 
 func init() {
-	f := goConfig.Fileformat{
+	f := goconfig.Fileformat{
 		Extension:   ".json",
 		Save:        SaveJSON,
 		Load:        LoadJSON,
 		PrepareHelp: PrepareHelp,
 	}
-	goConfig.Formats = append(goConfig.Formats, f)
+	goconfig.Formats = append(goconfig.Formats, f)
 }
 
 // LoadJSON config file
 func LoadJSON(config interface{}) (err error) {
-	configFile := goConfig.Path + goConfig.File
+	configFile := goconfig.Path + goconfig.File
 	file, err := os.Open(configFile)
-	if os.IsNotExist(err) && !goConfig.FileRequired {
+	if os.IsNotExist(err) && !goconfig.FileRequired {
 		err = nil
 		return
 	} else if err != nil {
@@ -41,9 +41,9 @@ func LoadJSON(config interface{}) (err error) {
 
 // SaveJSON config file
 func SaveJSON(config interface{}) (err error) {
-	_, err = os.Stat(goConfig.Path)
+	_, err = os.Stat(goconfig.Path)
 	if os.IsNotExist(err) {
-		err = os.Mkdir(goConfig.Path, os.ModePerm)
+		err = os.Mkdir(goconfig.Path, os.ModePerm)
 		if err != nil {
 			return
 		}
@@ -51,7 +51,7 @@ func SaveJSON(config interface{}) (err error) {
 		return
 	}
 
-	configFile := goConfig.Path + goConfig.File
+	configFile := goconfig.Path + goconfig.File
 
 	_, err = os.Stat(configFile)
 	if err != nil {
