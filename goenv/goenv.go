@@ -75,32 +75,31 @@ func getNewValue(field *reflect.StructField, value *reflect.Value, tag string, d
 		return
 	}
 
-	if datatype == "bool" {
+	switch datatype {
+	case "bool":
 		if value.Bool() {
 			ret = "true"
 			return
 		}
-	} else if datatype == "string" {
+	case "string":
 		ret = value.String()
 		if ret != "" {
 			return
 		}
-	} else if datatype == "int" {
+	case "int":
 		ret = strconv.FormatInt(value.Int(), 10)
 		if ret != "0" {
 			return
 		}
-	} else if datatype == "float64" {
+	case "float64":
 		f := value.Float()
 		ret = strconv.FormatFloat(f, 'f', -1, 64)
 		if ret != "0" {
 			return
 		}
 	}
-
 	// get value from default settings
 	ret = defaultValue
-
 	return
 }
 
@@ -109,15 +108,12 @@ func reflectInt(field *reflect.StructField, value *reflect.Value, tag string) (e
 	if newValue == "" {
 		return
 	}
-
 	var intNewValue int64
 	intNewValue, err = strconv.ParseInt(newValue, 10, 64)
 	if err != nil {
 		return
 	}
-
 	value.SetInt(intNewValue)
-
 	return
 }
 
@@ -126,15 +122,12 @@ func reflectFloat(field *reflect.StructField, value *reflect.Value, tag string) 
 	if newValue == "" {
 		return
 	}
-
 	var floatNewValue float64
 	floatNewValue, err = strconv.ParseFloat(newValue, 64)
 	if err != nil {
 		return
 	}
-
 	value.SetFloat(floatNewValue)
-
 	return
 }
 
@@ -143,9 +136,7 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 	if newValue == "" {
 		return
 	}
-
 	value.SetString(newValue)
-
 	return
 }
 
@@ -154,12 +145,8 @@ func reflectBool(field *reflect.StructField, value *reflect.Value, tag string) (
 	if newValue == "" {
 		return
 	}
-
-	var newBoolValue bool
-	newBoolValue = newValue == "true" || newValue == "t"
-
+	newBoolValue := newValue == "true" || newValue == "t"
 	value.SetBool(newBoolValue)
-
 	return
 }
 
