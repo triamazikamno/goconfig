@@ -171,8 +171,7 @@ func reflectFloat(field *reflect.StructField, value *reflect.Value, tag string) 
 
 func reflectString(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
 
-	var aux string
-	var defaltValue string
+	var aux, defaltValue string
 	defaltValue = field.Tag.Get(structtag.TagDefault)
 
 	meta := parameterMeta{}
