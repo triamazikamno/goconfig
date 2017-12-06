@@ -1,11 +1,12 @@
 package toml
 
 import (
-	"io/ioutil"
 	"os"
+	"path/filepath"
+	"reflect"
 
-	"github.com/BurntSushi/toml"
 	"github.com/crgimenes/goconfig"
+	"github.com/pelletier/go-toml"
 )
 
 func init() {
@@ -20,7 +21,7 @@ func init() {
 
 // LoadTOML config file
 func LoadTOML(config interface{}) (err error) {
-	configFile := goconfig.Path + goconfig.File
+	configFile := filepath.Join(goconfig.Path, goconfig.File)
 	_, err = os.Stat(configFile)
 	if os.IsNotExist(err) && !goconfig.FileRequired {
 		err = nil
@@ -28,8 +29,12 @@ func LoadTOML(config interface{}) (err error) {
 	} else if err != nil {
 		return
 	}
-
-	_, err = toml.DecodeFile(configFile, config)
+	var tree *toml.Tree
+	tree, err = toml.LoadFile(configFile)
+	if err != nil {
+		return
+	}
+	err = tree.Unmarshal(config)
 	return
 }
 
@@ -44,10 +49,8 @@ func SaveTOML(config interface{}) (err error) {
 	} else if err != nil {
 		return
 	}
-
-	configFile := goconfig.Path + goconfig.File
-
-	_, err = os.Stat(configFile)
+	configFile := filepath.Join(goconfig.Path, goconfig.File)
+	_, err = os.Stat(goconfig.Path)
 	if err != nil {
 		return
 	}
@@ -56,24 +59,19 @@ func SaveTOML(config interface{}) (err error) {
 		return
 	}
 	defer file.Close()
-	err = toml.NewEncoder(file).Encode(config)
+	cfg := reflect.ValueOf(config).Elem()
+	err = toml.NewEncoder(file).Encode(cfg)
 	return
 }
 
 // PrepareHelp return help string for this file format.
 func PrepareHelp(config interface{}) (help string, err error) {
-	tmpFile, err := ioutil.TempFile(os.TempDir(), goconfig.File)
+	var byt []byte
+	cfg := reflect.ValueOf(config).Elem()
+	byt, err = toml.Marshal(cfg)
 	if err != nil {
 		return
 	}
-	defer tmpFile.Close()
-	if err = toml.NewEncoder(tmpFile).Encode(config); err != nil {
-		return
-	}
-	helpAux, err := ioutil.ReadAll(tmpFile)
-	if err != nil {
-		return
-	}
-	help = string(helpAux)
+	help = string(byt)
 	return
 }
