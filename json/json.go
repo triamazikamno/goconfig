@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/crgimenes/goconfig"
 )
@@ -20,7 +21,7 @@ func init() {
 
 // LoadJSON config file
 func LoadJSON(config interface{}) (err error) {
-	configFile := goconfig.Path + goconfig.File
+	configFile := filepath.Join(goconfig.Path, goconfig.File)
 	file, err := os.Open(configFile)
 	if os.IsNotExist(err) && !goconfig.FileRequired {
 		err = nil
@@ -51,7 +52,7 @@ func SaveJSON(config interface{}) (err error) {
 		return
 	}
 
-	configFile := goconfig.Path + goconfig.File
+	configFile := filepath.Join(goconfig.Path, goconfig.File)
 
 	_, err = os.Stat(configFile)
 	if err != nil {
