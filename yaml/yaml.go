@@ -7,7 +7,6 @@ import (
 
 	"github.com/crgimenes/goconfig"
 	"gopkg.in/yaml.v2"
-	"git.ll-games.com/backend/core/logger"
 )
 
 func init() {
@@ -32,7 +31,6 @@ func LoadYAML(config interface{}) (err error) {
 	}
 
 	err = yaml.Unmarshal(file, config)
-	logger.Debug(string(file), config)
 
 	if err != nil {
 		return
