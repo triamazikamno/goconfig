@@ -17,6 +17,8 @@ func init() {
 		PrepareHelp: PrepareHelp,
 	}
 	goconfig.Formats = append(goconfig.Formats, f)
+	f.Extension = ".yml"
+	goconfig.Formats = append(goconfig.Formats, f)
 }
 
 // LoadYAML config file
