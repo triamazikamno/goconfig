@@ -10,6 +10,7 @@ import (
 
 	"github.com/crgimenes/goconfig/goenv"
 	"github.com/crgimenes/goconfig/goflags"
+	"path/filepath"
 )
 
 // Tag to set main name of field
@@ -113,7 +114,7 @@ func Parse(config interface{}) (err error) {
 // PrintDefaults print the default help
 func PrintDefaults() {
 	if File != "" {
-		fmt.Printf("Config file %q:\n", Path+File)
+		fmt.Printf("Config file %q:\n", filepath.Join(Path, File))
 		fmt.Println(HelpString)
 	}
 }
