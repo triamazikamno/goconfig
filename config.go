@@ -114,7 +114,7 @@ func Parse(config interface{}) (err error) {
 // PrintDefaults print the default help
 func PrintDefaults() {
 	if File != "" {
-		fmt.Printf("Config file %q:\n", filepath.Join(Path + File))
+		fmt.Printf("Config file %q:\n", filepath.Join(Path, File))
 		fmt.Println(HelpString)
 	}
 }
