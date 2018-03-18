@@ -30,6 +30,7 @@ func Setup(tag string, tagDefault string) {
 	structtag.ParseMap[reflect.Float64] = reflectFloat
 	structtag.ParseMap[reflect.String] = reflectString
 	structtag.ParseMap[reflect.Bool] = reflectBool
+	structtag.ParseMap[reflect.Slice] = reflectSlice
 }
 
 // SetTag set a new tag
@@ -137,6 +138,18 @@ func reflectString(field *reflect.StructField, value *reflect.Value, tag string)
 		return
 	}
 	value.SetString(newValue)
+	return
+}
+
+func reflectSlice(field *reflect.StructField, value *reflect.Value, tag string) (err error) {
+	if value.Len() == 0 {
+		return
+	}
+	newValue := reflect.MakeSlice(reflect.SliceOf(value.Type().Elem()), 0, value.Len())
+	for i := 0; i < value.Len(); i++ {
+		newValue = reflect.Append(newValue, value.Index(i))
+	}
+	value.Set(newValue)
 	return
 }
 
