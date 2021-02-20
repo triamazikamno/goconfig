@@ -8,9 +8,10 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/crgimenes/goconfig/goenv"
-	"github.com/crgimenes/goconfig/goflags"
 	"path/filepath"
+
+	"github.com/triamazikamno/goconfig/goenv"
+	"github.com/triamazikamno/goconfig/goflags"
 )
 
 // Tag to set main name of field

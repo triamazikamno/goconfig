@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/crgimenes/goconfig"
+	"github.com/triamazikamno/goconfig"
 )
 
 func init() {
